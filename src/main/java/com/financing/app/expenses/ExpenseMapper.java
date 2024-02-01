@@ -1,14 +1,16 @@
-package com.financing.app.user;
+package com.financing.app.expenses;
+
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = UserMapper.class,
+        uses = ExpenseMapper.class,
         injectionStrategy = InjectionStrategy.FIELD)
-public interface UserMapper {
-    User fromUserDTOtoUser(UserDTO userDto);
+public interface ExpenseMapper {
 
-    UserDTO fromUserToUserDTO(User user);
+    Expense fromExpenseDTOtoExpense(ExpenseDTO expenseDTO);
+
+    ExpenseDTO fromExpenseToExpenseDTO(Expense expense);
 }
