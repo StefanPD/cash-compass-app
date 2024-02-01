@@ -1,5 +1,8 @@
 package com.financing.app;
 
+import com.financing.app.expenses.ExpenseDTO;
+import com.financing.app.expenses.ExpenseMapper;
+import com.financing.app.expenses.ExpenseRepository;
 import com.financing.app.user.User;
 import com.financing.app.user.UserDTO;
 import com.financing.app.user.UserMapper;
@@ -16,21 +19,22 @@ import java.util.stream.Collectors;
 public class AppApplication {
 
     @Autowired
-    public UserRepository userRepository;
+    public ExpenseRepository expenseRepository;
     @Autowired
-    private UserMapper bidMapper;
+    private ExpenseMapper expenseMapper;
     public static void main(String[] args) {
         SpringApplication.run(AppApplication.class, args);
     }
 
+    // This is left for testing purposes
     @PostConstruct
     public void init() {
 
-        List<UserDTO> userList = userRepository.findAll()
+        List<ExpenseDTO> expenseList = expenseRepository.findAll()
                 .stream()
-                .map(bidMapper::fromUserToUserDTO)
+                .map(expenseMapper::fromExpenseToExpenseDTO)
                 .toList();
-        System.out.println("has" + userList.toString());
+        System.out.println("has" + expenseList.toString());
     }
 
 }
