@@ -24,9 +24,6 @@ comment on column users.created_at is 'Timestamp indicating when the user accoun
 
 comment on column users.updated_at is 'Timestamp of the last update made to the user''s account information.';
 
-alter table users
-    owner to stefanalimpic;
-
 create table incomes
 (
     income_id   serial
@@ -53,9 +50,6 @@ comment on column incomes.description is 'Optional description providing more de
 
 comment on column incomes.user_id is 'Identifier of the user receiving the income; foreign key referencing users table.';
 
-alter table incomes
-    owner to stefanalimpic;
-
 create table expenses
 (
     expense_id   serial
@@ -81,9 +75,6 @@ comment on column expenses.expense_date is 'Date when the expense was incurred.'
 comment on column expenses.description is 'Optional text description providing more details about the expense.';
 
 comment on column expenses.user_id is 'Identifier of the user who incurred the expense; foreign key referencing users table.';
-
-alter table expenses
-    owner to stefanalimpic;
 
 create table savings_goals
 (
@@ -114,9 +105,6 @@ comment on column savings_goals.end_date is 'End date or target date to achieve 
 
 comment on column savings_goals.user_id is 'Identifier of the user who set the savings goal; foreign key referencing users table.';
 
-alter table savings_goals
-    owner to stefanalimpic;
-
 create table budgets
 (
     budget_id    serial
@@ -144,9 +132,6 @@ comment on column budgets.total_budget is 'Total budget amount set by the user f
 
 comment on column budgets.user_id is 'Identifier of the user to whom the budget belongs; foreign key referencing users table.';
 
-alter table budgets
-    owner to stefanalimpic;
-
 create table budget_details
 (
     budget_details_id serial
@@ -166,8 +151,4 @@ comment on column budget_details.allocated_amount is 'Amount allocated to the sp
 comment on column budget_details.category is 'Category of the budget allocation (e.g., groceries, entertainment).';
 
 comment on column budget_details.budget_id is 'Identifier of the associated budget; foreign key referencing budgets table.';
-
-alter table budget_details
-    owner to stefanalimpic;
-
 
