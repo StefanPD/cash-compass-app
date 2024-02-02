@@ -1,8 +1,8 @@
 package com.financing.app;
 
-import com.financing.app.income.IncomeDTO;
-import com.financing.app.income.IncomeMapper;
-import com.financing.app.income.IncomeRepository;
+import com.financing.app.savings.goals.SavingsGoalDTO;
+import com.financing.app.savings.goals.SavingsGoalMapper;
+import com.financing.app.savings.goals.SavingsGoalRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -14,9 +14,10 @@ import java.util.List;
 public class AppApplication {
 
     @Autowired
-    public IncomeRepository incomeRepository;
+    public SavingsGoalRepository savingsGoalRepository;
     @Autowired
-    private IncomeMapper incomeMapper;
+    private SavingsGoalMapper savingsGoalMapper;
+
     public static void main(String[] args) {
         SpringApplication.run(AppApplication.class, args);
     }
@@ -24,12 +25,12 @@ public class AppApplication {
     // This is left for testing purposes
     @PostConstruct
     public void init() {
-        List<IncomeDTO> incomeList = incomeRepository.findAll()
+        List<SavingsGoalDTO> savingGoalsList = savingsGoalRepository.findAll()
                 .stream()
-                .map(incomeMapper::fromIncomeToIncomeDTO)
+                .map(savingsGoalMapper::fromSavingsGoalToSavingGoalsDTO)
                 .toList();
 
-        System.out.println("has" + incomeList.toString());
+        System.out.println("has" + savingGoalsList.toString());
     }
 
 }
