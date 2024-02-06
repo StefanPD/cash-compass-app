@@ -15,7 +15,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             value = """
                     SELECT b.budget_id, b.user_id, b.month, b.year, b.total_budget
                     FROM budgets b
-                    JOIN users u ON b.budget_id = u.user_id
+                    JOIN users u ON b.user_id = u.user_id
                     WHERE u.user_id = :userId""",
             nativeQuery = true)
     List<Budget> findBudgetsByUserId(@Param("userId") Long userId);
