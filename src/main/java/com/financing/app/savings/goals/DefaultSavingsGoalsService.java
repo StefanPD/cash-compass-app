@@ -1,5 +1,6 @@
 package com.financing.app.savings.goals;
 
+import com.financing.app.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class DefaultSavingsGoalsService implements SavingsGoalsService {
 
     @Override
     public List<SavingsGoalDTO> fetchSavingsGoalsByUserId(Long userId) {
-        return savingsGoalRepository.findSavingsGoalsByUserId(userId)
+        return savingsGoalRepository.findSavingsGoalsByUser(new User(userId))
                 .stream()
                 .map(savingsGoalMapper::fromSavingsGoalToSavingGoalsDTO)
                 .toList();
