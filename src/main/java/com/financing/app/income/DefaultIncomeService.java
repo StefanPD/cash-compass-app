@@ -1,5 +1,6 @@
 package com.financing.app.income;
 
+import com.financing.app.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class DefaultIncomeService implements IncomeService {
 
     @Override
     public List<IncomeDTO> fetchIncomesByUserId(Long userId) {
-        return incomeRepository.findIncomesByUserId(userId)
+        return incomeRepository.findIncomesByUser(new User(userId))
                 .stream()
                 .map(incomeMapper::fromIncomeToIncomeDTO)
                 .toList();

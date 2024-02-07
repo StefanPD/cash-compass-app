@@ -1,5 +1,6 @@
 package com.financing.app.budget;
 
+import com.financing.app.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class DefaultBudgetService implements BudgetService {
 
     @Override
     public List<BudgetDTO> fetchBudgetsById(Long userId) {
-        return budgetRepository.findBudgetsByUserId(userId)
+        return budgetRepository.findBudgetsByUser(new User(userId))
                 .stream()
                 .map(budgetMapper::fromBudgetToBudgetDTO)
                 .toList();

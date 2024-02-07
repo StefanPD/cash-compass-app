@@ -29,7 +29,7 @@ public class Budget {
 
     private int year;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

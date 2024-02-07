@@ -1,5 +1,6 @@
 package com.financing.app.expenses;
 
+import com.financing.app.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class DefaultExpenseService implements ExpenseService {
 
     @Override
     public List<ExpenseDTO> fetchExpensesByUserId(Long userId) {
-        return expenseRepository.findExpensesByUserId(userId)
+        return expenseRepository.findExpensesByUser(new User(userId))
                 .stream()
                 .map(expenseMapper::fromExpenseToExpenseDTO)
                 .toList();
