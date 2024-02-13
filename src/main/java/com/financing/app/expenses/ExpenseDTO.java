@@ -1,6 +1,5 @@
 package com.financing.app.expenses;
 
-import com.financing.app.user.User;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,5 +15,4 @@ public class ExpenseDTO {
     private String category;
     private LocalDateTime expenseDate;
     private String description;
-    private User user;
 }
