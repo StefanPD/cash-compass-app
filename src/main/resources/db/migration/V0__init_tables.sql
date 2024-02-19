@@ -1,4 +1,4 @@
-create table users
+create table if not exists users
 (
     user_id       serial
         primary key,
@@ -24,7 +24,7 @@ comment on column users.created_at is 'Timestamp indicating when the user accoun
 
 comment on column users.updated_at is 'Timestamp of the last update made to the user''s account information.';
 
-create table incomes
+create table if not exists incomes
 (
     income_id   serial
         primary key,
@@ -50,7 +50,7 @@ comment on column incomes.description is 'Optional description providing more de
 
 comment on column incomes.user_id is 'Identifier of the user receiving the income; foreign key referencing users table.';
 
-create table expenses
+create table if not exists expenses
 (
     expense_id   serial
         primary key,
@@ -76,7 +76,7 @@ comment on column expenses.description is 'Optional text description providing m
 
 comment on column expenses.user_id is 'Identifier of the user who incurred the expense; foreign key referencing users table.';
 
-create table savings_goals
+create table if not exists savings_goals
 (
     saving_goal_id   serial
         primary key,
@@ -105,7 +105,7 @@ comment on column savings_goals.end_date is 'End date or target date to achieve 
 
 comment on column savings_goals.user_id is 'Identifier of the user who set the savings goal; foreign key referencing users table.';
 
-create table budgets
+create table if not exists budgets
 (
     budget_id    serial
         primary key,
@@ -132,7 +132,7 @@ comment on column budgets.total_budget is 'Total budget amount set by the user f
 
 comment on column budgets.user_id is 'Identifier of the user to whom the budget belongs; foreign key referencing users table.';
 
-create table budget_details
+create table if not exists budget_details
 (
     budget_details_id serial
         primary key,
