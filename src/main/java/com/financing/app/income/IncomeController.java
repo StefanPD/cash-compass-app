@@ -8,15 +8,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class IncomeController {
 
     private final IncomeService incomeService;
+    private final IncomeDateTransformer dateTransformer;
 
-    public IncomeController(IncomeService incomeService) {
+    public IncomeController(IncomeService incomeService, IncomeDateTransformer dateTransformer) {
         this.incomeService = incomeService;
+        this.dateTransformer = dateTransformer;
     }
 
     @GetMapping("users/{userId}/incomes")
@@ -26,9 +28,9 @@ public class IncomeController {
     }
 
     @GetMapping("incomes/{userId}/history")
-    public ResponseEntity<List<IncomeDTO>> getIncomesByUserId(@PathVariable Long userId,
-                                                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomesByUserId(@PathVariable Long userId,
+                                                                                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                                                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (startDate == null && endDate == null) {
             endDate = LocalDate.now();
             startDate = endDate.minusMonths(1);
@@ -38,6 +40,7 @@ public class IncomeController {
             endDate = startDate.plusMonths(1);
         }
         var history = incomeService.fetchIncomesByHistory(userId, startDate, endDate);
-        return ResponseEntity.ok(history);
+        var response = dateTransformer.transform(history);
+        return ResponseEntity.ok(response);
     }
 }
