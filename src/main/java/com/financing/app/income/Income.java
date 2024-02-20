@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -29,7 +29,7 @@ public class Income {
     private String source;
 
     @Column(name = "income_date")
-    private LocalDateTime incomeDate;
+    private LocalDate incomeDate;
 
     private String description;
 

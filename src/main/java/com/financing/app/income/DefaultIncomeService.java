@@ -3,6 +3,7 @@ package com.financing.app.income;
 import com.financing.app.user.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,6 +20,14 @@ public class DefaultIncomeService implements IncomeService {
     @Override
     public List<IncomeDTO> fetchIncomesByUserId(Long userId) {
         return incomeRepository.findIncomesByUser(new User(userId))
+                .stream()
+                .map(incomeMapper::fromIncomeToIncomeDTO)
+                .toList();
+    }
+
+    @Override
+    public List<IncomeDTO> fetchIncomesByHistory(Long userId, LocalDate startDate, LocalDate endDate) {
+        return incomeRepository.findIncomeByUserAndIncomeDateBetween(new User(userId), startDate, endDate)
                 .stream()
                 .map(incomeMapper::fromIncomeToIncomeDTO)
                 .toList();
