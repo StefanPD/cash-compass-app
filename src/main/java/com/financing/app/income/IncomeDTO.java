@@ -16,4 +16,13 @@ public class IncomeDTO {
     private String source;
     private LocalDate incomeDate;
     private String description;
+
+    IncomeDTO(BigDecimal amount, String source, LocalDate incomeDate, String description) {
+        this.amount = amount;
+        this.source = source;
+        this.incomeDate = incomeDate;
+        this.description = description;
+    }
 }
+
+
