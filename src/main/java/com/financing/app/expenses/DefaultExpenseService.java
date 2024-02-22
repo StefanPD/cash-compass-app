@@ -24,4 +24,11 @@ public class DefaultExpenseService implements ExpenseService {
                 .map(expenseMapper::fromExpenseToExpenseDTO)
                 .toList();
     }
+
+    @Override
+    public void saveExpense(Long userId, ExpenseDTO expenseDto) {
+        var expense = expenseMapper.fromExpenseDTOtoExpense(expenseDto);
+        expense.setUser(new User(userId));
+        expenseRepository.save(expense);
+    }
 }

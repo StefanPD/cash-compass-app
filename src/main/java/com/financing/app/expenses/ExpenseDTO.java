@@ -4,15 +4,21 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @ToString
 public class ExpenseDTO {
-
     private Long expensesId;
     private BigDecimal amount;
     private String category;
-    private LocalDateTime expenseDate;
+    private LocalDate expenseDate;
     private String description;
+
+    public ExpenseDTO(BigDecimal amount, String category, LocalDate expenseDate, String description) {
+        this.amount = amount;
+        this.category = category;
+        this.expenseDate = expenseDate;
+        this.description = description;
+    }
 }
