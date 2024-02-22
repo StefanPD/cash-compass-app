@@ -2,13 +2,11 @@ package com.financing.app.income;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class IncomeController {
@@ -42,5 +40,19 @@ public class IncomeController {
         var history = incomeService.fetchIncomesByHistory(userId, startDate, endDate);
         var response = dateTransformer.transform(history);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("incomes/{userId}/income")
+    public ResponseEntity<Void> postIncome(@PathVariable Long userId,
+                                           @RequestBody IncomeRequest incomeRequest) {
+
+        var incomeDto = new IncomeDTO(
+                incomeRequest.amount(),
+                incomeRequest.source(),
+                incomeRequest.incomeDate(),
+                incomeRequest.description()
+        );
+        incomeService.saveIncome(userId, incomeDto);
+        return ResponseEntity.noContent().build();
     }
 }

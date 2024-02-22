@@ -32,4 +32,11 @@ public class DefaultIncomeService implements IncomeService {
                 .map(incomeMapper::fromIncomeToIncomeDTO)
                 .toList();
     }
+
+    @Override
+    public void saveIncome(Long userId, IncomeDTO incomeDTO) {
+        var income = incomeMapper.fromIncomeDTOtoIncome(incomeDTO);
+        income.setUser(new User(userId));
+        incomeRepository.save(income);
+    }
 }
