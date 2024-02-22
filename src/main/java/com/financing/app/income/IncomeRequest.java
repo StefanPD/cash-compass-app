@@ -7,7 +7,6 @@ public record IncomeRequest(
         BigDecimal amount,
         String source,
         LocalDate incomeDate,
-        String description,
-        Long userId
+        String description
 ) {
 }
