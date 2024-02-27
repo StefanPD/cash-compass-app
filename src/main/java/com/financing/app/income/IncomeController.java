@@ -41,6 +41,9 @@ public class IncomeController {
         } else if (endDate == null) {
             endDate = startDate.plusMonths(1);
         }
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date must not come after end date.");
+        }
         var history = incomeService.fetchIncomesByHistory(userId, startDate, endDate);
         var response = dateTransformer.transform(history);
         return ResponseEntity.ok(response);

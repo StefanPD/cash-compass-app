@@ -28,12 +28,11 @@ public class BudgetController {
         return ResponseEntity.ok(budgets);
     }
 
-    // TODO: Standardise error response
     @GetMapping("budgets/{userId}/budget-expense-check")
-    public ResponseEntity<?> getBudgetVsExpenseTotal(@PathVariable @Min(1) Long userId,
+    public ResponseEntity<BudgetVsExpenseDTO> getBudgetVsExpenseTotal(@PathVariable @Min(1) Long userId,
                                                      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         if (date.isAfter(LocalDate.now())) {
-            return ResponseEntity.badRequest().body("Date cannot be in the future");
+            throw new IllegalArgumentException("Date cannot be in the future");
         }
         var budgetVsExpense = budgetService.fetchBudgetsVsExpense(userId, date);
         return ResponseEntity.ok(budgetVsExpense);
