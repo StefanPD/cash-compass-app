@@ -2,12 +2,16 @@ package com.financing.app.expenses;
 
 import com.financing.app.income.IncomeDTO;
 import com.financing.app.income.IncomeRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 public class ExpenseController {
 
     private final ExpenseService expenseService;
@@ -17,13 +21,13 @@ public class ExpenseController {
     }
 
     @GetMapping("users/{userId}/expenses")
-    public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable @Min(1) Long userId) {
         return ResponseEntity.ok(expenseService.fetchExpensesByUserId(userId));
     }
 
     @PostMapping("expenses/{userId}/expense")
-    public ResponseEntity<Void> postExpense(@PathVariable Long userId,
-                                           @RequestBody ExpenseRequest expenseRequest) {
+    public ResponseEntity<Void> postExpense(@PathVariable @Min(1) Long userId,
+                                            @Valid @RequestBody ExpenseRequest expenseRequest) {
         var expenseDto = new ExpenseDTO(
                 expenseRequest.amount(),
                 expenseRequest.category(),

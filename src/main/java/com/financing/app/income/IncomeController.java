@@ -1,7 +1,10 @@
 package com.financing.app.income;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -9,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Validated
 public class IncomeController {
 
     private final IncomeService incomeService;
@@ -20,13 +24,13 @@ public class IncomeController {
     }
 
     @GetMapping("users/{userId}/incomes")
-    public ResponseEntity<List<IncomeDTO>> getIncomesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<IncomeDTO>> getIncomesByUserId(@PathVariable @Min(1) Long userId) {
         var incomes = incomeService.fetchIncomesByUserId(userId);
         return ResponseEntity.ok(incomes);
     }
 
     @GetMapping("incomes/{userId}/history")
-    public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomesByUserId(@PathVariable Long userId,
+    public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomesByUserId(@PathVariable @Min(1) Long userId,
                                                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (startDate == null && endDate == null) {
@@ -43,8 +47,8 @@ public class IncomeController {
     }
 
     @PostMapping("incomes/{userId}/income")
-    public ResponseEntity<Void> postIncome(@PathVariable Long userId,
-                                           @RequestBody IncomeRequest incomeRequest) {
+    public ResponseEntity<Void> postIncome(@PathVariable @Min(1) Long userId,
+                                           @Valid @RequestBody IncomeRequest incomeRequest) {
 
         var incomeDto = new IncomeDTO(
                 incomeRequest.amount(),
