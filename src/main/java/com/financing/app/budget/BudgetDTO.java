@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 public class BudgetDTO {
-    private Long incomeId;
+    private Long budgetId;
     private BigDecimal totalBudget;
     private int month;
     private int year;
