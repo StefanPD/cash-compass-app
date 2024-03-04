@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@Table(name = "incomes")
+@Table(name = "incomes", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Income {
@@ -36,5 +36,13 @@ public class Income {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Income(BigDecimal amount, String source, LocalDate incomeDate, String description, User user) {
+        this.amount = amount;
+        this.source = source;
+        this.incomeDate = incomeDate;
+        this.description = description;
+        this.user = user;
+    }
 }
 
