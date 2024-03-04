@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @ToString
@@ -14,7 +14,7 @@ public class SavingsGoalDTO {
     private String name;
     private BigDecimal targetAmount;
     private BigDecimal currentAmount;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private User user;
 }

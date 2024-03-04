@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "savings_goals")
+@Table(name = "savings_goals", schema = "public")
 public class SavingsGoal {
 
     @Id
@@ -23,7 +23,7 @@ public class SavingsGoal {
     @Column(name = "saving_goal_id")
     private Long savingGoalId;
 
-    @Column(name= "saving_goal_name")
+    @Column(name = "saving_goal_name")
     private String name;
 
     @Column(precision = 10, scale = 2, name = "target_amount")
@@ -33,10 +33,10 @@ public class SavingsGoal {
     private BigDecimal currentAmount;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
