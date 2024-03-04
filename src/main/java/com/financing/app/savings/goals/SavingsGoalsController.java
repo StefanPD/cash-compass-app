@@ -1,5 +1,6 @@
 package com.financing.app.savings.goals;
 
+import com.financing.app.utils.ApiVersion;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @Validated
+@ApiVersion("api/v1")
 public class SavingsGoalsController {
 
     private final SavingsGoalsService savingsGoalsService;

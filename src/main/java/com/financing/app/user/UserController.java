@@ -1,5 +1,6 @@
 package com.financing.app.user;
 
+import com.financing.app.utils.ApiVersion;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @Validated
+@ApiVersion("api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -21,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("userId") @Min(1) Long userId) {
         var user = userService.fetchUserByUserId(userId).orElseThrow(EntityNotFoundException::new);
         return ResponseEntity.ok(user);

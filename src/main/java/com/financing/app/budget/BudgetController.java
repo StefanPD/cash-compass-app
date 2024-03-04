@@ -1,5 +1,6 @@
 package com.financing.app.budget;
 
+import com.financing.app.utils.ApiVersion;
 import jakarta.validation.constraints.Min;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +15,21 @@ import java.util.List;
 
 @RestController
 @Validated
+@ApiVersion("api/v1/budgets")
 public class BudgetController {
-
     private final BudgetService budgetService;
 
     public BudgetController(BudgetService budgetService) {
         this.budgetService = budgetService;
     }
 
-    @GetMapping("/budgets/{userId}")
+    @GetMapping("{userId}")
     public ResponseEntity<List<BudgetDTO>> getBudgetsByUserId(@PathVariable @Min(1) Long userId) {
         var budgets = budgetService.fetchBudgetsById(userId);
         return ResponseEntity.ok(budgets);
     }
 
-    @GetMapping("budgets/{userId}/budget-expense-check")
+    @GetMapping("{userId}/budget-expense-check")
     public ResponseEntity<BudgetVsExpenseDTO> getBudgetVsExpenseTotal(@PathVariable @Min(1) Long userId,
                                                      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         if (date.isAfter(LocalDate.now())) {
