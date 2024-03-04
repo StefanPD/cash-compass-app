@@ -1,11 +1,9 @@
 package com.financing.app.user;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.financing.app.exception.ErrorResponse;
-import com.financing.app.income.Income;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,7 +44,7 @@ public class UserControllerTest {
         // Given
         var userId = 1L;
         // When
-        var result = mockMvc.perform(get("/users/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/users/{userId}", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -62,7 +59,7 @@ public class UserControllerTest {
         // Given
         var userId = 0L;
         // When
-        var result = mockMvc.perform(get("/users/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/users/{userId}", userId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

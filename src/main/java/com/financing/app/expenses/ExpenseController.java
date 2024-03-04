@@ -2,6 +2,7 @@ package com.financing.app.expenses;
 
 import com.financing.app.income.IncomeDTO;
 import com.financing.app.income.IncomeRequest;
+import com.financing.app.utils.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,8 @@ import java.util.List;
 
 @RestController
 @Validated
+@ApiVersion("api/v1")
 public class ExpenseController {
-
     private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {

@@ -1,5 +1,6 @@
 package com.financing.app.income;
 
+import com.financing.app.utils.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,8 +14,8 @@ import java.util.Map;
 
 @RestController
 @Validated
+@ApiVersion("api/v1")
 public class IncomeController {
-
     private final IncomeService incomeService;
     private final IncomeDateTransformer dateTransformer;
 

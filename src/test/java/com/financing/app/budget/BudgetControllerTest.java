@@ -62,10 +62,6 @@ class BudgetControllerTest {
         expenseRepository.save(expense);
     }
 
-    @AfterEach
-    void tearDown() {
-
-    }
 
     @Test
     void whenRequestingBudgets_withValidUserId_returnsBudgetDetails() throws Exception {
@@ -73,7 +69,7 @@ class BudgetControllerTest {
         Long userId = 1L;
 
         // When
-        var result = mockMvc.perform(get("/budgets/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/budgets/{userId}", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -97,7 +93,7 @@ class BudgetControllerTest {
         Long userId = 0L;
 
         // When
-        var result = mockMvc.perform(get("/budgets/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/budgets/{userId}", userId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -121,7 +117,7 @@ class BudgetControllerTest {
         String date = "2024-01-01";
 
         //When
-        var result = mockMvc.perform(get("/budgets/{userId}/budget-expense-check", userId)
+        var result = mockMvc.perform(get("/api/v1/budgets/{userId}/budget-expense-check", userId)
                         .param("date", date))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
