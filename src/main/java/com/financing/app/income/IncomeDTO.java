@@ -23,6 +23,6 @@ public class IncomeDTO {
         this.incomeDate = incomeDate;
         this.description = description;
     }
+
+    public IncomeDTO() {}
 }
-
-
