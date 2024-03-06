@@ -31,9 +31,8 @@ public class IncomeController {
     }
 
     @GetMapping("bla")
-    public ResponseEntity<List<IncomeDTO>> getBla() {
-        var incomes = incomeService.fetchIncomesByUserId(1L);
-        return ResponseEntity.ok(incomes);
+    public ResponseEntity<String> getBla() {
+        return ResponseEntity.ok("welcome");
     }
 
     @GetMapping("incomes/{userId}/history")
