@@ -33,6 +33,7 @@ public class IncomeController {
     @GetMapping("bla")
     public ResponseEntity<String> getBla() {
         return ResponseEntity.ok("welcome");
+
     }
 
     @GetMapping("incomes/{userId}/history")
