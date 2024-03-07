@@ -30,12 +30,6 @@ public class IncomeController {
         return ResponseEntity.ok(incomes);
     }
 
-    @GetMapping("bla")
-    public ResponseEntity<String> getBla() {
-        return ResponseEntity.ok("welcome");
-
-    }
-
     @GetMapping("incomes/{userId}/history")
     public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomesByUserId(@PathVariable @Min(1) Long userId,
                                                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
