@@ -9,12 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AppApplication {
 
-    @Autowired
-    public BudgetRepository budgetRepository;
-
-    @Autowired
-    private BudgetMapper budgetMapper;
-
     public static void main(String[] args) {
         SpringApplication.run(AppApplication.class, args);
     }
