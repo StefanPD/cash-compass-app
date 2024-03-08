@@ -44,7 +44,7 @@ public class UserControllerTest {
         // Given
         var userId = 1L;
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/user/{userId}", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -59,7 +59,7 @@ public class UserControllerTest {
         // Given
         var userId = 0L;
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/user/{userId}", userId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

@@ -63,7 +63,7 @@ class ExpenseControllerTest {
         Long userId = 1L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}/expenses", userId))
+        var result = mockMvc.perform(get("/api/v1/expense/{userId}/expenses", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -87,7 +87,7 @@ class ExpenseControllerTest {
         Long userId = 0L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}/expenses", userId))
+        var result = mockMvc.perform(get("/api/v1/expense/{userId}/expenses", userId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -119,7 +119,7 @@ class ExpenseControllerTest {
         String expenseRequestJson = mapper.writeValueAsString(expenseRequest);
 
         // When
-        mockMvc.perform(post("/api/v1/expenses/{userId}/expense", userId)
+        mockMvc.perform(post("/api/v1/expense/{userId}/expense", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(expenseRequestJson))
                 .andExpect(status().isNoContent());
@@ -145,7 +145,7 @@ class ExpenseControllerTest {
 
         String expenseRequestJson = mapper.writeValueAsString(expenseRequest);
 
-        mockMvc.perform(post("/api/v1/expenses/{userId}/expense", userId)
+        mockMvc.perform(post("/api/v1/expense/{userId}/expense", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(expenseRequestJson))
                 .andExpect(status().isInternalServerError());

@@ -15,18 +15,18 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -60,7 +60,7 @@ public class IncomeControllerTest {
         // Given
         var userId = 1L;
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}/incomes", userId))
+        var result = mockMvc.perform(get("/api/v1/income/{userId}/incomes", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -80,7 +80,7 @@ public class IncomeControllerTest {
         // Given
         var userId = 999999;
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}/incomes", userId))
+        var result = mockMvc.perform(get("/api/v1/income/{userId}/incomes", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -99,14 +99,15 @@ public class IncomeControllerTest {
         var start = LocalDate.of(2023, 1, 1);
         var end = LocalDate.of(2023, 12, 31);
         // When
-        var result = mockMvc.perform(get("/api/v1/incomes/{userId}/history", userId)
+        var result = mockMvc.perform(get("/api/v1/income/{userId}/history", userId)
                         .param("startDate", start.toString())
                         .param("endDate", end.toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         var json = result.getResponse().getContentAsString();
-        Map<Integer, Map<String, List<IncomeDTO>>> history = mapper.readValue(json, new TypeReference<>(){});
+        Map<Integer, Map<String, List<IncomeDTO>>> history = mapper.readValue(json, new TypeReference<>() {
+        });
         List<IncomeDTO> januaryIncomes = history.get(2023).get("January");
         // Then
         assertThat(history).isNotEmpty();
@@ -125,14 +126,15 @@ public class IncomeControllerTest {
         var start = LocalDate.of(2023, 1, 1);
         var end = LocalDate.of(2023, 12, 31);
         // When
-        var result = mockMvc.perform(get("/api/v1/incomes/{userId}/history", userId)
+        var result = mockMvc.perform(get("/api/v1/income/{userId}/history", userId)
                         .param("startDate", start.toString())
                         .param("endDate", end.toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         var json = result.getResponse().getContentAsString();
-        Map<Integer, Map<String, List<IncomeDTO>>> history = mapper.readValue(json, new TypeReference<>(){});
+        Map<Integer, Map<String, List<IncomeDTO>>> history = mapper.readValue(json, new TypeReference<>() {
+        });
         // Then
         assertThat(history).isEmpty();
     }
@@ -144,7 +146,7 @@ public class IncomeControllerTest {
         var start = LocalDate.of(2023, 12, 31);
         var end = LocalDate.of(2023, 1, 1);
         // When
-        var result = mockMvc.perform(get("/api/v1/incomes/{userId}/history", userId)
+        var result = mockMvc.perform(get("/api/v1/income/{userId}/history", userId)
                         .param("startDate", start.toString())
                         .param("endDate", end.toString()))
                 .andExpect(status().is4xxClientError())
@@ -172,7 +174,7 @@ public class IncomeControllerTest {
         );
         var json = mapper.writeValueAsString(request);
         // When
-        mockMvc.perform(post("/api/v1/incomes/{userId}/income", userId)
+        mockMvc.perform(post("/api/v1/income/{userId}/income", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNoContent());
@@ -194,7 +196,7 @@ public class IncomeControllerTest {
         );
         var json = mapper.writeValueAsString(request);
         // When
-        var result = mockMvc.perform(post("/api/v1/incomes/{userId}/income", userId)
+        var result = mockMvc.perform(post("/api/v1/income/{userId}/income", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is5xxServerError())
