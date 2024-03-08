@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@ApiVersion("api/v1/budgets")
+@ApiVersion("api/v1/budget")
 public class BudgetController {
     private final BudgetService budgetService;
 
@@ -23,7 +23,7 @@ public class BudgetController {
         this.budgetService = budgetService;
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("{userId}/budgets")
     public ResponseEntity<List<BudgetDTO>> getBudgetsByUserId(@PathVariable @Min(1) Long userId) {
         var budgets = budgetService.fetchBudgetsById(userId);
         return ResponseEntity.ok(budgets);
@@ -31,7 +31,7 @@ public class BudgetController {
 
     @GetMapping("{userId}/budget-expense-check")
     public ResponseEntity<BudgetVsExpenseDTO> getBudgetVsExpenseTotal(@PathVariable @Min(1) Long userId,
-                                                     @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+                                                                      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         if (date.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Date cannot be in the future");
         }
