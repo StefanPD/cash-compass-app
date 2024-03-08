@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @Validated
-@ApiVersion("api/v1")
+@ApiVersion("api/v1/income")
 public class IncomeController {
     private final IncomeService incomeService;
     private final IncomeDateTransformer dateTransformer;
@@ -24,13 +24,13 @@ public class IncomeController {
         this.dateTransformer = dateTransformer;
     }
 
-    @GetMapping("users/{userId}/incomes")
+    @GetMapping("{userId}/incomes")
     public ResponseEntity<List<IncomeDTO>> getIncomesByUserId(@PathVariable @Min(1) Long userId) {
         var incomes = incomeService.fetchIncomesByUserId(userId);
         return ResponseEntity.ok(incomes);
     }
 
-    @GetMapping("incomes/{userId}/history")
+    @GetMapping("{userId}/history")
     public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomesByUserId(@PathVariable @Min(1) Long userId,
                                                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
@@ -50,7 +50,7 @@ public class IncomeController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("incomes/{userId}/income")
+    @PostMapping("{userId}/income")
     public ResponseEntity<Void> postIncome(@PathVariable @Min(1) Long userId,
                                            @Valid @RequestBody IncomeRequest incomeRequest) {
 

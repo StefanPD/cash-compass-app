@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@ApiVersion("api/v1")
+@ApiVersion("api/v1/saving-goal")
 public class SavingsGoalsController {
 
     private final SavingsGoalsService savingsGoalsService;
@@ -21,7 +21,7 @@ public class SavingsGoalsController {
         this.savingsGoalsService = savingsGoalsService;
     }
 
-    @GetMapping("/users/{userId}/savings-goals")
+    @GetMapping("{userId}/savings-goals")
     ResponseEntity<List<SavingsGoalDTO>> getSavingsGoalsByUserId(@PathVariable("userId") @Min(1) Long userId) {
         return ResponseEntity.ok(savingsGoalsService.fetchSavingsGoalsByUserId(userId));
     }

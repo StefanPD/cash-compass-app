@@ -1,7 +1,5 @@
 package com.financing.app.expenses;
 
-import com.financing.app.income.IncomeDTO;
-import com.financing.app.income.IncomeRequest;
 import com.financing.app.utils.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -13,7 +11,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@ApiVersion("api/v1")
+@ApiVersion("api/v1/expense")
 public class ExpenseController {
     private final ExpenseService expenseService;
 
@@ -21,12 +19,12 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @GetMapping("users/{userId}/expenses")
+    @GetMapping("{userId}/expenses")
     public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable @Min(1) Long userId) {
         return ResponseEntity.ok(expenseService.fetchExpensesByUserId(userId));
     }
 
-    @PostMapping("expenses/{userId}/expense")
+    @PostMapping("{userId}/expense")
     public ResponseEntity<Void> postExpense(@PathVariable @Min(1) Long userId,
                                             @Valid @RequestBody ExpenseRequest expenseRequest) {
         var expenseDto = new ExpenseDTO(
