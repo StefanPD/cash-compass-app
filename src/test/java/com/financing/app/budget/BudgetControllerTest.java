@@ -9,7 +9,6 @@ import com.financing.app.expenses.Expense;
 import com.financing.app.expenses.ExpenseRepository;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -69,7 +68,7 @@ class BudgetControllerTest {
         Long userId = 1L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/budgets/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/budget/{userId}/budgets", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -93,7 +92,7 @@ class BudgetControllerTest {
         Long userId = 0L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/budgets/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/budget/{userId}", userId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -117,7 +116,7 @@ class BudgetControllerTest {
         String date = "2024-01-01";
 
         //When
-        var result = mockMvc.perform(get("/api/v1/budgets/{userId}/budget-expense-check", userId)
+        var result = mockMvc.perform(get("/api/v1/budget/{userId}/budget-expense-check", userId)
                         .param("date", date))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

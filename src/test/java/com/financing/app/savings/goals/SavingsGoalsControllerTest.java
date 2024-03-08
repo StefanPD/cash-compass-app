@@ -62,7 +62,7 @@ class SavingsGoalsControllerTest {
         Long userId = 1L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}/savings-goals", userId))
+        var result = mockMvc.perform(get("/api/v1/saving-goal/{userId}/savings-goals", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -87,7 +87,7 @@ class SavingsGoalsControllerTest {
         Long userId = 0L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/users/{userId}/savings-goals", userId))
+        var result = mockMvc.perform(get("/api/v1/saving-goal/{userId}/savings-goals", userId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
