@@ -1,12 +1,16 @@
 package com.financing.app.income;
 
 import com.financing.app.user.User;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Slf4j
 public class DefaultIncomeService implements IncomeService {
 
     private final IncomeRepository incomeRepository;
@@ -34,9 +38,14 @@ public class DefaultIncomeService implements IncomeService {
     }
 
     @Override
-    public void saveIncome(Long userId, IncomeDTO incomeDTO) {
+    public void saveIncome(Long userId, IncomeDTO incomeDTO) throws EntityNotFoundException {
         var income = incomeMapper.fromIncomeDTOtoIncome(incomeDTO);
         income.setUser(new User(userId));
-        incomeRepository.save(income);
+        try {
+            incomeRepository.save(income);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Income failed to save - api/v1/income/{userId}/income, for userId: {}, income: {}", userId, incomeDTO);
+            throw new EntityNotFoundException("User with this Id doesn't exist");
+        }
     }
 }

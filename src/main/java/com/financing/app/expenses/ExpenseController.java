@@ -3,6 +3,7 @@ package com.financing.app.expenses;
 import com.financing.app.utils.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @Validated
 @ApiVersion("api/v1/expense")
+@Slf4j
 public class ExpenseController {
     private final ExpenseService expenseService;
 
@@ -21,12 +23,14 @@ public class ExpenseController {
 
     @GetMapping("{userId}/expenses")
     public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable @Min(1) Long userId) {
+        log.info("GET request received - api/v1/expense/{userId}/expenses, for userId: {} ", userId);
         return ResponseEntity.ok(expenseService.fetchExpensesByUserId(userId));
     }
 
     @PostMapping("{userId}/expense")
     public ResponseEntity<Void> postExpense(@PathVariable @Min(1) Long userId,
                                             @Valid @RequestBody ExpenseRequest expenseRequest) {
+        log.info("POST request received - api/v1/expense/{userId}/expense, for userId: {} and expense: {}", userId, expenseRequest);
         var expenseDto = new ExpenseDTO(
                 expenseRequest.amount(),
                 expenseRequest.category(),
@@ -34,6 +38,7 @@ public class ExpenseController {
                 expenseRequest.description()
         );
         expenseService.saveExpense(userId, expenseDto);
+        log.info("Expense saved - api/v1/expense/{userId}/expenses, for userId: {} and expense: {}", userId, expenseDto);
         return ResponseEntity.noContent().build();
     }
 }
