@@ -1,0 +1,85 @@
+2024-03-14 13:38:43 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.financing.app.savings.goals.SavingsGoalsControllerTest]: SavingsGoalsControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-03-14 13:38:43 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.financing.app.AppApplication for test class com.financing.app.savings.goals.SavingsGoalsControllerTest
+2024-03-14 13:38:43 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2024-03-14 13:38:44 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-03-14 13:38:44 [main] INFO  c.f.a.s.g.SavingsGoalsControllerTest - Starting SavingsGoalsControllerTest using Java 21.0.2 with PID 64731 (started by stefanalimpic in /Users/stefanalimpic/Devel/Financing app/app)
+2024-03-14 13:38:44 [main] INFO  c.f.a.s.g.SavingsGoalsControllerTest - The following 1 profile is active: "test"
+2024-03-14 13:38:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-14 13:38:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 67 ms. Found 5 JPA repository interfaces.
+2024-03-14 13:38:46 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testdb (H2 2.2)
+2024-03-14 13:38:46 [main] WARN  o.f.c.i.database.base.Database - Flyway upgrade recommended: H2 2.2.224 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
+2024-03-14 13:38:46 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2024-03-14 13:38:46 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.014s)
+2024-03-14 13:38:46 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2024-03-14 13:38:46 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
+2024-03-14 13:38:46 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "0 - init test tables"
+2024-03-14 13:38:46 [main] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v0 (execution time 00:00.028s)
+2024-03-14 13:38:46 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-14 13:38:46 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-03-14 13:38:46 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-03-14 13:38:47 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-03-14 13:38:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-03-14 13:38:47 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn3: url=jdbc:h2:mem:testdb user=SA
+2024-03-14 13:38:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-03-14 13:38:47 [main] WARN  org.hibernate.dialect.Dialect - HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
+2024-03-14 13:38:47 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-03-14 13:38:48 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-03-14 13:38:48 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-14 13:38:48 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-03-14 13:38:49 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-14 13:38:50 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-03-14 13:38:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-03-14 13:38:50 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 15 endpoint(s) beneath base path '/actuator'
+2024-03-14 13:38:50 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 51 ms
+2024-03-14 13:38:50 [main] INFO  c.f.a.s.g.SavingsGoalsControllerTest - Started SavingsGoalsControllerTest in 6.578 seconds (process running for 8.124)
+2024-03-14 13:38:51 [main] INFO  c.f.a.s.goals.SavingsGoalsController - GET request received - api/v1/saving-goal/{userId}/savings-goals, for userId: 1
+2024-03-14 13:38:51 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.financing.app.expenses.ExpenseControllerTest]: ExpenseControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-03-14 13:38:51 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.financing.app.AppApplication for test class com.financing.app.expenses.ExpenseControllerTest
+2024-03-14 13:38:51 [main] INFO  c.f.app.expenses.ExpenseController - POST request received - api/v1/expense/{userId}/expense, for userId: 1 and expense: ExpenseRequest[amount=100.0, category=Food, expenseDate=2024-03-14, description=Lunch with friends]
+2024-03-14 13:38:51 [main] INFO  c.f.app.expenses.ExpenseController - Expense saved - api/v1/expense/{userId}/expenses, for userId: 1 and expense: ExpenseDTO(expensesId=null, amount=100.0, category=Food, expenseDate=2024-03-14, description=Lunch with friends)
+2024-03-14 13:38:51 [main] INFO  c.f.app.expenses.ExpenseController - GET request received - api/v1/expense/{userId}/expenses, for userId: 1 
+2024-03-14 13:38:51 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.financing.app.income.IncomeControllerTest]: IncomeControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-03-14 13:38:52 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.financing.app.AppApplication for test class com.financing.app.income.IncomeControllerTest
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - GET request received - api/v1/income/{userId}/history, for userId: 1, startDate: 2023-01-01, endDate: 2023-12-31
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - GET request received - api/v1/income/{userId}/incomes, for userId: 1
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - POST request received - api/v1/income/{userId}/income, for userId: 1, income: IncomeRequest[amount=100, source=test, incomeDate=2024-03-14, description=test]
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - Income saved - api/v1/income/{userId}/income, for userId: 1, income: IncomeRequest[amount=100, source=test, incomeDate=2024-03-14, description=test]
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - GET request received - api/v1/income/{userId}/history, for userId: 9999999, startDate: 2023-01-01, endDate: 2023-12-31
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - GET request received - api/v1/income/{userId}/history, for userId: 1, startDate: 2023-12-31, endDate: 2023-01-01
+2024-03-14 13:38:52 [main] ERROR c.f.app.income.IncomeController - GET request failure - api/v1/income/{userId}/history, for userId: 1, startDate: 2023-12-31, endDate: 2023-01-01
+2024-03-14 13:38:52 [main] INFO  c.f.app.income.IncomeController - GET request received - api/v1/income/{userId}/incomes, for userId: 999999
+2024-03-14 13:38:52 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.financing.app.user.UserControllerTest]: UserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-03-14 13:38:52 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.financing.app.AppApplication for test class com.financing.app.user.UserControllerTest
+2024-03-14 13:38:52 [main] INFO  c.financing.app.user.UserController - GET request received - api/v1/user/{userId}, for userId: 1
+2024-03-14 13:38:52 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.financing.app.AppApplicationTests]: AppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-03-14 13:38:52 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.financing.app.AppApplication for test class com.financing.app.AppApplicationTests
+2024-03-14 13:38:52 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2024-03-14 13:38:52 [main] INFO  c.financing.app.AppApplicationTests - Starting AppApplicationTests using Java 21.0.2 with PID 64731 (started by stefanalimpic in /Users/stefanalimpic/Devel/Financing app/app)
+2024-03-14 13:38:52 [main] INFO  c.financing.app.AppApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2024-03-14 13:38:52 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-14 13:38:52 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 19 ms. Found 5 JPA repository interfaces.
+2024-03-14 13:38:52 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-03-14 13:38:53 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@4bdea421
+2024-03-14 13:38:53 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-03-14 13:38:53 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/financingdb (PostgreSQL 16.1)
+2024-03-14 13:38:53 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 2 migrations (execution time 00:00.016s)
+2024-03-14 13:38:53 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": 1
+2024-03-14 13:38:53 [main] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2024-03-14 13:38:53 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-14 13:38:53 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-03-14 13:38:53 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-03-14 13:38:53 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-03-14 13:38:53 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-03-14 13:38:53 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-14 13:38:53 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-14 13:38:54 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 15 endpoint(s) beneath base path '/actuator'
+2024-03-14 13:38:54 [main] INFO  c.financing.app.AppApplicationTests - Started AppApplicationTests in 1.668 seconds (process running for 11.844)
+2024-03-14 13:38:54 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.financing.app.budget.BudgetControllerTest]: BudgetControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-03-14 13:38:54 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.financing.app.AppApplication for test class com.financing.app.budget.BudgetControllerTest
+2024-03-14 13:38:54 [main] INFO  c.f.app.budget.BudgetController - GET request received - api/v1/budget/{userId}/budgets, for userId: 1
+2024-03-14 13:38:54 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-14 13:38:54 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-03-14 13:38:54 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-03-14 13:38:54 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-03-14 13:38:54 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2024-03-14 13:38:54 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
