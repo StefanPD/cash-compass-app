@@ -2,6 +2,7 @@ package com.financing.app.budget;
 
 import com.financing.app.utils.ApiVersion;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,9 @@ import java.util.List;
 @Validated
 @ApiVersion("api/v1/budget")
 @Slf4j
+@AllArgsConstructor
 public class BudgetController {
     private final BudgetService budgetService;
-
-    public BudgetController(BudgetService budgetService) {
-        this.budgetService = budgetService;
-    }
 
     @GetMapping("{userId}/budgets")
     public ResponseEntity<List<BudgetDTO>> getBudgetsByUserId(@PathVariable @Min(1) Long userId) {
