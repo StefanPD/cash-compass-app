@@ -3,6 +3,7 @@ package com.financing.app.expenses;
 import com.financing.app.utils.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,12 +15,9 @@ import java.util.List;
 @Validated
 @ApiVersion("api/v1/expense")
 @Slf4j
+@AllArgsConstructor
 public class ExpenseController {
     private final ExpenseService expenseService;
-
-    public ExpenseController(ExpenseService expenseService) {
-        this.expenseService = expenseService;
-    }
 
     @GetMapping("{userId}/expenses")
     public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable @Min(1) Long userId) {
