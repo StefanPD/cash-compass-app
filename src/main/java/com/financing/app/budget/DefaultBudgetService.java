@@ -5,6 +5,7 @@ import com.financing.app.expenses.ExpenseMapper;
 import com.financing.app.expenses.ExpenseRepository;
 import com.financing.app.user.User;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,23 +13,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class DefaultBudgetService implements BudgetService {
 
     private final BudgetRepository budgetRepository;
     private final BudgetMapper budgetMapper;
     private final ExpenseRepository expenseRepository;
-
     private final ExpenseMapper expenseMapper;
-
-    public DefaultBudgetService(BudgetRepository budgetRepository,
-                                BudgetMapper budgetMapper,
-                                ExpenseRepository expenseRepository,
-                                ExpenseMapper expenseMapper) {
-        this.budgetRepository = budgetRepository;
-        this.budgetMapper = budgetMapper;
-        this.expenseRepository = expenseRepository;
-        this.expenseMapper = expenseMapper;
-    }
 
     @Override
     public List<BudgetDTO> fetchBudgetsById(Long userId) {

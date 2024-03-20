@@ -3,6 +3,7 @@ package com.financing.app.income;
 import com.financing.app.utils.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +18,10 @@ import java.util.Map;
 @Validated
 @ApiVersion("api/v1/income")
 @Slf4j
+@AllArgsConstructor
 public class IncomeController {
     private final IncomeService incomeService;
     private final IncomeDateTransformer dateTransformer;
-
-    public IncomeController(IncomeService incomeService, IncomeDateTransformer dateTransformer) {
-        this.incomeService = incomeService;
-        this.dateTransformer = dateTransformer;
-    }
 
     @GetMapping("{userId}/incomes")
     public ResponseEntity<List<IncomeDTO>> getIncomesByUserId(@PathVariable @Min(1) Long userId) {

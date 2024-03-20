@@ -2,6 +2,7 @@ package com.financing.app.expenses;
 
 import com.financing.app.user.User;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -10,15 +11,11 @@ import java.util.List;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class DefaultExpenseService implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
-
-    public DefaultExpenseService(ExpenseRepository expenseRepository, ExpenseMapper expenseMapper) {
-        this.expenseRepository = expenseRepository;
-        this.expenseMapper = expenseMapper;
-    }
 
     @Override
     public List<ExpenseDTO> fetchExpensesByUserId(Long userId) {

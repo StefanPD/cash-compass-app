@@ -7,4 +7,6 @@ public interface SavingsGoalsService {
     List<SavingsGoalDTO> fetchSavingsGoalsByUserId(Long userId);
 
     void updateSavingsGoal(SavingsGoalDTO savingsGoal) throws EntityNotFoundException;
+
+    void deleteSavingsGoalWithIds(Long userId, Long savingGoalId) throws EntityNotFoundException;
 }
