@@ -180,8 +180,8 @@ public class IncomeControllerTest {
                 .andExpect(status().isNoContent());
         var incomes = incomeRepository.findIncomesByUser(new User(1L));
         // Then
-        assertThat(incomes.getLast().getSource()).isEqualTo("test");
-        assertThat(incomes.getLast().getDescription()).isEqualTo("test");
+        assertThat(incomes.getLast().source()).isEqualTo("test");
+        assertThat(incomes.getLast().description()).isEqualTo("test");
     }
 
     @Test

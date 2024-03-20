@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,13 +19,12 @@ public class DefaultExpenseService implements ExpenseService {
     private final ExpenseMapper expenseMapper;
 
     @Override
-    public List<ExpenseDTO> fetchExpensesByUserId(Long userId) {
-        return expenseRepository.findExpensesByUser(new User(userId))
-                .stream()
-                .map(expenseMapper::fromExpenseToExpenseDTO)
-                .toList();
+    public List<ExpenseInfo> fetchExpensesByUserId(Long userId) {
+        return expenseRepository.findExpensesByUser(new User(userId));
+
     }
 
+    @Transactional
     @Override
     public void saveExpense(Long userId, ExpenseDTO expenseDto) throws EntityNotFoundException {
         var expense = expenseMapper.fromExpenseDTOtoExpense(expenseDto);

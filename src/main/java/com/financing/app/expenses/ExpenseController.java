@@ -20,7 +20,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping("{userId}/expenses")
-    public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@PathVariable @Min(1) Long userId) {
+    public ResponseEntity<List<ExpenseInfo>> getExpensesByUserId(@PathVariable @Min(1) Long userId) {
         log.info("GET request received - api/v1/expense/{userId}/expenses, for userId: {} ", userId);
         return ResponseEntity.ok(expenseService.fetchExpensesByUserId(userId));
     }

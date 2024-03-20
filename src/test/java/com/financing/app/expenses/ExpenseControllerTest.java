@@ -128,7 +128,7 @@ class ExpenseControllerTest {
         var expense = expenseRepository.findExpensesByUser(new User(1L));
 
         assertThat(expense.size()).isEqualTo(2);
-        assertThat(expense.get(1).getCategory()).isEqualTo("Food");
+        assertThat(expense.get(1).category()).isEqualTo("Food");
     }
 
     @Test

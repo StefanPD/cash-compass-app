@@ -24,7 +24,7 @@ public class BudgetController {
     private final BudgetService budgetService;
 
     @GetMapping("{userId}/budgets")
-    public ResponseEntity<List<BudgetDTO>> getBudgetsByUserId(@PathVariable @Min(1) Long userId) {
+    public ResponseEntity<List<BudgetInfo>> getBudgetsByUserId(@PathVariable @Min(1) Long userId) {
         log.info("GET request received - api/v1/budget/{userId}/budgets, for userId: {}", userId);
         var budgets = budgetService.fetchBudgetsById(userId);
         return ResponseEntity.ok(budgets);

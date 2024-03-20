@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,14 +19,13 @@ public class DefaultIncomeService implements IncomeService {
     private final IncomeRepository incomeRepository;
     private final IncomeMapper incomeMapper;
 
+    @Transactional
     @Override
-    public List<IncomeDTO> fetchIncomesByUserId(Long userId) {
-        return incomeRepository.findIncomesByUser(new User(userId))
-                .stream()
-                .map(incomeMapper::fromIncomeToIncomeDTO)
-                .toList();
+    public List<IncomeInfo> fetchIncomesByUserId(Long userId) {
+        return incomeRepository.findIncomesByUser(new User(userId));
     }
 
+    @Transactional
     @Override
     public List<IncomeDTO> fetchIncomesByHistory(Long userId, LocalDate startDate, LocalDate endDate) {
         return incomeRepository.findIncomeByUserAndIncomeDateBetween(new User(userId), startDate, endDate)
@@ -34,6 +34,7 @@ public class DefaultIncomeService implements IncomeService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public void saveIncome(Long userId, IncomeDTO incomeDTO) throws EntityNotFoundException {
         var income = incomeMapper.fromIncomeDTOtoIncome(incomeDTO);

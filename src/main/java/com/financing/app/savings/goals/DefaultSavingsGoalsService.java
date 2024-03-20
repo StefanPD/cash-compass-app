@@ -4,6 +4,7 @@ import com.financing.app.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,16 +14,14 @@ import java.util.Objects;
 public class DefaultSavingsGoalsService implements SavingsGoalsService {
 
     private final SavingsGoalRepository savingsGoalRepository;
-    private final SavingsGoalMapper savingsGoalMapper;
 
+    @Transactional
     @Override
-    public List<SavingsGoalDTO> fetchSavingsGoalsByUserId(Long userId) {
-        return savingsGoalRepository.findSavingsGoalsByUser(new User(userId))
-                .stream()
-                .map(savingsGoalMapper::fromSavingsGoalToSavingGoalsDTO)
-                .toList();
+    public List<SavingGoalInfo> fetchSavingsGoalsByUserId(Long userId) {
+        return savingsGoalRepository.findSavingsGoalsByUser(new User(userId));
     }
 
+    @Transactional
     @Override
     public void updateSavingsGoal(SavingsGoalDTO savingsGoal) throws EntityNotFoundException {
         savingsGoalRepository
@@ -42,6 +41,7 @@ public class DefaultSavingsGoalsService implements SavingsGoalsService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     @Override
     public void deleteSavingsGoalWithIds(Long userId, Long savingGoalId) throws EntityNotFoundException {
         savingsGoalRepository

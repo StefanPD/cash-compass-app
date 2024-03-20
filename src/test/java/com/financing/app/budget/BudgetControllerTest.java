@@ -83,7 +83,6 @@ class BudgetControllerTest {
         assertThat(budgets.getFirst().getTotalBudget().compareTo(BigDecimal.valueOf(100.00))).isEqualTo(0);
         assertThat(budgets.getFirst().getMonth()).isEqualTo(1);
         assertThat(budgets.getFirst().getYear()).isEqualTo(2024);
-        assertThat(budgets.getFirst().getBudgetId()).isEqualTo(1L);
     }
 
     @Test
