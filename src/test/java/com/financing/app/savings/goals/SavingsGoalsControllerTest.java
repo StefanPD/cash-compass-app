@@ -69,16 +69,16 @@ class SavingsGoalsControllerTest {
 
         String jsonContent = result.getResponse().getContentAsString();
 
-        List<SavingsGoalDTO> savingsGoals = mapper.readValue(jsonContent, new TypeReference<>() {
+        List<SavingGoalInfo> savingsGoals = mapper.readValue(jsonContent, new TypeReference<>() {
         });
 
         // Then
         assertThat(savingsGoals).isNotEmpty();
-        assertThat(savingsGoals.getFirst().getName()).isEqualTo("vacation");
-        assertThat(savingsGoals.getFirst().getCurrentAmount().compareTo(BigDecimal.valueOf(100.00))).isEqualTo(0);
-        assertThat(savingsGoals.getFirst().getTargetAmount().compareTo(BigDecimal.valueOf(1000.00))).isEqualTo(0);
-        assertThat(savingsGoals.getFirst().getStartDate()).isEqualTo(LocalDate.parse("2024-01-01"));
-        assertThat(savingsGoals.getFirst().getEndDate()).isEqualTo(LocalDate.parse("2024-06-01"));
+        assertThat(savingsGoals.getFirst().name()).isEqualTo("vacation");
+        assertThat(savingsGoals.getFirst().currentAmount().compareTo(BigDecimal.valueOf(100.00))).isEqualTo(0);
+        assertThat(savingsGoals.getFirst().targetAmount().compareTo(BigDecimal.valueOf(1000.00))).isEqualTo(0);
+        assertThat(savingsGoals.getFirst().startDate()).isEqualTo(LocalDate.parse("2024-01-01"));
+        assertThat(savingsGoals.getFirst().endDate()).isEqualTo(LocalDate.parse("2024-06-01"));
     }
 
     @Test

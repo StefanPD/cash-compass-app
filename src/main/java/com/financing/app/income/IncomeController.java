@@ -24,7 +24,7 @@ public class IncomeController {
     private final IncomeDateTransformer dateTransformer;
 
     @GetMapping("{userId}/incomes")
-    public ResponseEntity<List<IncomeDTO>> getIncomesByUserId(@PathVariable @Min(1) Long userId) {
+    public ResponseEntity<List<IncomeInfo>> getIncomesByUserId(@PathVariable @Min(1) Long userId) {
         log.info("GET request received - api/v1/income/{userId}/incomes, for userId: {}", userId);
         var incomes = incomeService.fetchIncomesByUserId(userId);
         return ResponseEntity.ok(incomes);

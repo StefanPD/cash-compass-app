@@ -51,7 +51,7 @@ public class UserControllerTest {
         var json = result.getResponse().getContentAsString();
         var user = mapper.readValue(json, UserDTO.class);
         // Then
-        assertThat(user.getUserId()).isEqualTo(userId);
+        assertThat(user.getEmail()).isEqualTo("test@email.com");
     }
 
     @Test

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ExpenseService {
 
-    List<ExpenseDTO> fetchExpensesByUserId(Long userId);
+    List<ExpenseInfo> fetchExpensesByUserId(Long userId);
 
     void saveExpense(Long userId, ExpenseDTO expenseDto);
 }

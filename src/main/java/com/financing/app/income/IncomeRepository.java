@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
-    List<Income> findIncomesByUser(User user);
+    List<IncomeInfo> findIncomesByUser(User user);
 
     List<Income> findIncomeByUserAndIncomeDateBetween(User user, LocalDate startDate, LocalDate endDate);
 }

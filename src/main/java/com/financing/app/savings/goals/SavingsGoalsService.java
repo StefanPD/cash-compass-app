@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 public interface SavingsGoalsService {
-    List<SavingsGoalDTO> fetchSavingsGoalsByUserId(Long userId);
+    List<SavingGoalInfo> fetchSavingsGoalsByUserId(Long userId);
 
     void updateSavingsGoal(SavingsGoalDTO savingsGoal) throws EntityNotFoundException;
 

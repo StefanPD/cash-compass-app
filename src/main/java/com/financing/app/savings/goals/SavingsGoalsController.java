@@ -3,7 +3,6 @@ package com.financing.app.savings.goals;
 import com.financing.app.user.User;
 import com.financing.app.utils.ApiVersion;
 import jakarta.validation.constraints.Min;
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class SavingsGoalsController {
     private final SavingsGoalsService savingsGoalsService;
 
     @GetMapping("{userId}/savings-goals")
-    ResponseEntity<List<SavingsGoalDTO>> getSavingsGoalsByUserId(@PathVariable("userId") @Min(1) Long userId) {
+    ResponseEntity<List<SavingGoalInfo>> getSavingsGoalsByUserId(@PathVariable("userId") @Min(1) Long userId) {
         log.info("GET request received - api/v1/saving-goal/{userId}/savings-goals, for userId: {}", userId);
         return ResponseEntity.ok(savingsGoalsService.fetchSavingsGoalsByUserId(userId));
     }

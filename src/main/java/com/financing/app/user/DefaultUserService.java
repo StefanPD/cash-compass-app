@@ -2,6 +2,7 @@ package com.financing.app.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -10,10 +11,10 @@ import java.util.Optional;
 public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
+    @Transactional
     @Override
-    public Optional<UserDTO> fetchUserByUserId(Long userId) {
-        return userRepository.findById(userId).map(userMapper::fromUserToUserDTO);
+    public Optional<UserInfo> fetchUserByUserId(Long userId) {
+        return userRepository.findByUserId(userId);
     }
 }

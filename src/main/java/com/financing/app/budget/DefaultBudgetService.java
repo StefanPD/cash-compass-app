@@ -7,6 +7,7 @@ import com.financing.app.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,13 +23,11 @@ public class DefaultBudgetService implements BudgetService {
     private final ExpenseMapper expenseMapper;
 
     @Override
-    public List<BudgetDTO> fetchBudgetsById(Long userId) {
-        return budgetRepository.findBudgetsByUser(new User(userId))
-                .stream()
-                .map(budgetMapper::fromBudgetToBudgetDTO)
-                .toList();
+    public List<BudgetInfo> fetchBudgetsById(Long userId) {
+        return budgetRepository.findBudgetsByUser(new User(userId));
     }
 
+    @Transactional
     @Override
     public BudgetVsExpenseDTO fetchBudgetsVsExpense(Long userId, LocalDate date) throws EntityNotFoundException {
         var month = date.getMonthValue();

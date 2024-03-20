@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("userId") @Min(1) Long userId) {
+    public ResponseEntity<UserInfo> getUserById(@PathVariable("userId") @Min(1) Long userId) {
         log.info("GET request received - api/v1/user/{userId}, for userId: {}", userId);
         var user = userService.fetchUserByUserId(userId).orElseThrow(() -> {
             log.info("GET request failure - api/v1/user/{userId}, for userId: {}", userId);
