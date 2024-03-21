@@ -12,8 +12,7 @@ import java.util.List;
 @Data
 @ToString
 @AllArgsConstructor
-public class BudgetVsExpenseDTO {
+public class BudgetExpensesDiff {
     BudgetDTO budget;
-    List<ExpenseDTO> expenses;
     BigDecimal diff;
 }

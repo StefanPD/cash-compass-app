@@ -31,7 +31,7 @@ public class BudgetController {
     }
 
     @GetMapping("{userId}/budget-expense-check")
-    public ResponseEntity<BudgetVsExpenseDTO> getBudgetVsExpenseTotal(@PathVariable @Min(1) Long userId,
+    public ResponseEntity<BudgetExpensesDiff> getBudgetVsExpenseTotal(@PathVariable @Min(1) Long userId,
                                                                       @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         log.info("GET request received - api/v1/budget/{userId}/budget-expense-check, for userId: {} and date: {}", userId, date);
