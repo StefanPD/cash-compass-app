@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,5 +39,15 @@ public class ExpenseController {
         expenseService.saveExpense(userId, expenseDto);
         log.info("Expense saved - api/v1/expense/{userId}/expenses, for userId: {} and expense: {}", userId, expenseDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{userId}/history")
+    public ResponseEntity<ExpensePage> getExpenseHistory(@PathVariable @Min(1) Long userId,
+                                                           @RequestParam("date") LocalDate date,
+                                                           @RequestParam("size") int size,
+                                                           @RequestParam("page") int page) {
+        log.info("GET request received - api/v1/expense/{userId}/history, for userId: {} ", userId);
+        var expenses = expenseService.fetchExpensesForSpecificMonth(userId, date, size, page);
+        return ResponseEntity.ok(expenses);
     }
 }

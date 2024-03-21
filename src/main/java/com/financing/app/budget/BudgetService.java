@@ -7,5 +7,5 @@ public interface BudgetService {
 
     List<BudgetInfo> fetchBudgetsById(Long userId);
 
-    BudgetVsExpenseDTO fetchBudgetsVsExpense(Long userId, LocalDate date);
+    BudgetExpensesDiff fetchBudgetsVsExpense(Long userId, LocalDate date);
 }

@@ -123,12 +123,10 @@ class BudgetControllerTest {
 
         String jsonContent = result.getResponse().getContentAsString();
 
-        var budgetVsExpenseDTO = mapper.readValue(jsonContent, BudgetVsExpenseDTO.class);
+        var budgetVsExpenseDTO = mapper.readValue(jsonContent, BudgetExpensesDiff.class);
 
         // Then
         assertThat(budgetVsExpenseDTO.budget).isNotNull();
-        assertThat(budgetVsExpenseDTO.expenses).isNotNull();
-        assertThat(budgetVsExpenseDTO.expenses).isNotEmpty();
         assertThat(budgetVsExpenseDTO.diff).isNotNull();
     }
 

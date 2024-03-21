@@ -5,9 +5,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -35,5 +37,15 @@ public class DefaultExpenseService implements ExpenseService {
             log.error("Expense failed to save - api/v1/expense/{userId}/expenses, for userId: {} and expense: {}", userId, expenseDto);
             throw new EntityNotFoundException("User with this Id doesn't exist");
         }
+    }
+
+    @Override
+    public ExpensePage fetchExpensesForSpecificMonth(Long userId, LocalDate date, int size, int page) {
+        var expensePage = expenseRepository.findByUserIdAndYearAndMonth(userId, date.getYear(), date.getMonthValue(), PageRequest.of(page, size));
+        List<ExpenseDTO> content = expensePage.getContent()
+                .stream()
+                .map(expenseMapper::fromExpenseToExpenseDTO)
+                .toList();
+        return new ExpensePage(content, expensePage.getNumber(), expensePage.getTotalPages(), expensePage.getTotalElements());
     }
 }
