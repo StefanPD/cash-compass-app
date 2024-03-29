@@ -88,8 +88,44 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+        </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <flyway.locations>classpath:/db/migration/prod</flyway.locations>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <flyway.locations>classpath:/db/migration/test</flyway.locations>
+            </properties>
+        </profile>
+    </profiles>
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -130,6 +166,18 @@
                         <schema>public</schema>
                     </schemas>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                        <configuration>
+                            <locations>
+                                <location>${flyway.locations}</location>
+                            </locations>
+                        </configuration>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.postgresql</groupId>

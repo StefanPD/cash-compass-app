@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.financing.app.exception.ErrorResponse;
+import com.financing.app.user.Role;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +47,7 @@ public class IncomeControllerTest {
 
     @BeforeEach
     void setUp() {
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now());
+        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
         userRepository.save(user);
         IntStream.range(1, 12).forEach(idx -> {
             var income = new Income(BigDecimal.valueOf(100), "test", LocalDate.of(2023, idx, 1), "test", user);
