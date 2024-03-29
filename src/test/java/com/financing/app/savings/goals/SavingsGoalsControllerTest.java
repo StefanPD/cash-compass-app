@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.financing.app.exception.ErrorResponse;
+import com.financing.app.user.Role;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -44,7 +45,7 @@ class SavingsGoalsControllerTest {
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now());
+        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
         var savingGoal = new SavingsGoal(1L, "vacation", BigDecimal.valueOf(1000.00), BigDecimal.valueOf(100.00), LocalDate.parse("2024-01-01"), LocalDate.parse("2024-06-01"), user);
 
         userRepository.save(user);

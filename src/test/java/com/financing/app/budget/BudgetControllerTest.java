@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.financing.app.exception.ErrorResponse;
 import com.financing.app.expenses.Expense;
 import com.financing.app.expenses.ExpenseRepository;
+import com.financing.app.user.Role;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +53,7 @@ class BudgetControllerTest {
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now());
+        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
         var budget = new Budget(1L, BigDecimal.valueOf(100.00), 1, 2024, user);
         var expense = new Expense(1L, BigDecimal.valueOf(100.00), "Groceries Expense", LocalDate.parse("2024-01-01"), "test", user);
 

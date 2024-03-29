@@ -34,7 +34,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now());
+        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(),Role.USER);
         userRepository.save(user);
         mapper.registerModule(new JavaTimeModule());
     }
