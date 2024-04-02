@@ -5,6 +5,7 @@ import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +26,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(@Valid RegisterRequest request) {
+        if (userRepository.existsByUsername(request.username())) {
+            throw new IllegalArgumentException("Username already taken");
+        }
+        if (userRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
         var user = new User(
                 request.email(),
                 request.username(),
