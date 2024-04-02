@@ -3,10 +3,14 @@ package com.financing.app.savings.goals;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.financing.app.auth.AuthenticationService;
+import com.financing.app.auth.Token;
+import com.financing.app.auth.TokenRepository;
 import com.financing.app.exception.ErrorResponse;
 import com.financing.app.user.Role;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
+import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,30 +44,32 @@ class SavingsGoalsControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private TokenRepository tokenRepository;
     private final ObjectMapper mapper = new ObjectMapper();
+    private Token token;
 
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
-        var savingGoal = new SavingsGoal(1L, "vacation", BigDecimal.valueOf(1000.00), BigDecimal.valueOf(100.00), LocalDate.parse("2024-01-01"), LocalDate.parse("2024-06-01"), user);
-
-        userRepository.save(user);
-        savingsGoalRepository.save(savingGoal);
-    }
-
-    @AfterEach
-    void tearDown() {
-
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        token = authenticationHelperTest.registerUserTest();
+        var user = userRepository.findByUsername("test123");
+        if (user.isPresent()) {
+            var savingGoal = new SavingsGoal(1L, "vacation", BigDecimal.valueOf(1000.00), BigDecimal.valueOf(100.00), LocalDate.parse("2024-01-01"), LocalDate.parse("2024-06-01"), user.get());
+            savingsGoalRepository.save(savingGoal);
+        }
     }
 
     @Test
     void whenRequestingSavingGoals_withValidUserId_returnsSavingGoals() throws Exception {
-        // Given
-        Long userId = 1L;
-
         // When
-        var result = mockMvc.perform(get("/api/v1/saving-goal/{userId}/savings-goals", userId))
+        var result = mockMvc.perform(get("/api/v1/saving-goals")
+                .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -80,28 +86,5 @@ class SavingsGoalsControllerTest {
         assertThat(savingsGoals.getFirst().targetAmount().compareTo(BigDecimal.valueOf(1000.00))).isEqualTo(0);
         assertThat(savingsGoals.getFirst().startDate()).isEqualTo(LocalDate.parse("2024-01-01"));
         assertThat(savingsGoals.getFirst().endDate()).isEqualTo(LocalDate.parse("2024-06-01"));
-    }
-
-    @Test
-    void whenRequestingSavingsGoals_withInvalidUserId_returnsError() throws Exception {
-        // Given
-        Long userId = 0L;
-
-        // When
-        var result = mockMvc.perform(get("/api/v1/saving-goal/{userId}/savings-goals", userId))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        String jsonContent = result.getResponse().getContentAsString();
-
-        ErrorResponse error = mapper.readValue(jsonContent, ErrorResponse.class);
-
-        // Then
-        assertThat(error).isInstanceOf(ErrorResponse.class);
-        assertThat(error.status()).isEqualTo(500);
-        assertThat(error.error()).isNotBlank();
-        assertThat(error.message()).isNotBlank();
-
     }
 }

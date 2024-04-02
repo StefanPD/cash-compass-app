@@ -3,7 +3,11 @@ package com.financing.app.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.financing.app.auth.AuthenticationService;
+import com.financing.app.auth.Token;
+import com.financing.app.auth.TokenRepository;
 import com.financing.app.exception.ErrorResponse;
+import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,12 +32,18 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private TokenRepository tokenRepository;
     private final ObjectMapper mapper = new ObjectMapper();
+    private Token token;
 
     @BeforeEach
     void setUp() {
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(),Role.USER);
-        userRepository.save(user);
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        token = authenticationHelperTest.registerUserTest();
         mapper.registerModule(new JavaTimeModule());
     }
 
@@ -43,8 +51,10 @@ public class UserControllerTest {
     void whenRequestUser_givenValidUserId_returnsUser() throws Exception {
         // Given
         var userId = 1L;
+
         // When
-        var result = mockMvc.perform(get("/api/v1/user/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/users/{userId}", userId)
+                        .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -59,7 +69,8 @@ public class UserControllerTest {
         // Given
         var userId = 0L;
         // When
-        var result = mockMvc.perform(get("/api/v1/user/{userId}", userId))
+        var result = mockMvc.perform(get("/api/v1/users/{userId}", userId)
+                        .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

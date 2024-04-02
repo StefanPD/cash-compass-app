@@ -3,11 +3,12 @@ package com.financing.app.expenses;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.exception.ErrorResponse;
-import com.financing.app.user.Role;
+import com.financing.app.auth.AuthenticationService;
+import com.financing.app.auth.Token;
+import com.financing.app.auth.TokenRepository;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
-import org.junit.jupiter.api.AfterEach;
+import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,30 +41,34 @@ class ExpenseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private TokenRepository tokenRepository;
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private Token token;
 
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
-        var expense = new Expense(1L, BigDecimal.valueOf(100.00), "Groceries Expense", LocalDate.parse("2024-01-01"), "test", user);
-
-        userRepository.save(user);
-        expenseRepository.save(expense);
-    }
-
-    @AfterEach
-    void tearDown() {
-
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        token = authenticationHelperTest.registerUserTest();
+        var user = userRepository.findByUsername("test123");
+        if (user.isPresent()) {
+            var expense = new Expense(1L, BigDecimal.valueOf(100.00), "Groceries Expense", LocalDate.parse("2024-01-01"), "test", user.get());
+            expenseRepository.save(expense);
+        }
     }
 
     @Test
     void whenRequestingExpense_withValidUserId_returnsExpenses() throws Exception {
-        // Given
-        Long userId = 1L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/expense/{userId}/expenses", userId))
+        var result = mockMvc.perform(get("/api/v1/expenses")
+                        .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -83,33 +87,7 @@ class ExpenseControllerTest {
     }
 
     @Test
-    void whenRequestingExpense_withInvalidUserId_returnsError() throws Exception {
-        // Given
-        Long userId = 0L;
-
-        // When
-        var result = mockMvc.perform(get("/api/v1/expense/{userId}/expenses", userId))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        String jsonContent = result.getResponse().getContentAsString();
-
-        ErrorResponse error = mapper.readValue(jsonContent, ErrorResponse.class);
-
-        // Then
-        assertThat(error).isInstanceOf(ErrorResponse.class);
-        assertThat(error.status()).isEqualTo(500);
-        assertThat(error.error()).isNotBlank();
-        assertThat(error.message()).isNotBlank();
-
-    }
-
-    @Test
     void whenUploadingExpense_withValidExpense_returnsSuccess_and_saveExpense() throws Exception {
-        // Given
-        Long userId = 1L;
-
         ExpenseRequest expenseRequest = new ExpenseRequest(
                 BigDecimal.valueOf(100.00),
                 "Food",
@@ -120,7 +98,8 @@ class ExpenseControllerTest {
         String expenseRequestJson = mapper.writeValueAsString(expenseRequest);
 
         // When
-        mockMvc.perform(post("/api/v1/expense/{userId}/expense", userId)
+        mockMvc.perform(post("/api/v1/expenses")
+                        .header("Authorization", "Bearer " + token.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(expenseRequestJson))
                 .andExpect(status().isNoContent());
@@ -134,9 +113,6 @@ class ExpenseControllerTest {
 
     @Test
     void whenUploadingExpense_withInvalidExpense_returnsError() throws Exception {
-        // Given
-        Long userId = 1L;
-
         ExpenseRequest expenseRequest = new ExpenseRequest(
                 BigDecimal.valueOf(-100),
                 "",
@@ -146,7 +122,8 @@ class ExpenseControllerTest {
 
         String expenseRequestJson = mapper.writeValueAsString(expenseRequest);
 
-        mockMvc.perform(post("/api/v1/expense/{userId}/expense", userId)
+        mockMvc.perform(post("/api/v1/expenses")
+                        .header("Authorization", "Bearer " + token.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(expenseRequestJson))
                 .andExpect(status().isInternalServerError());

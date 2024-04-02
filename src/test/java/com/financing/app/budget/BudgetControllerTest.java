@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.exception.ErrorResponse;
+import com.financing.app.auth.AuthenticationResponse;
+import com.financing.app.auth.AuthenticationService;
+import com.financing.app.auth.Token;
+import com.financing.app.auth.TokenRepository;
 import com.financing.app.expenses.Expense;
 import com.financing.app.expenses.ExpenseRepository;
-import com.financing.app.user.Role;
-import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
+import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,28 +49,38 @@ class BudgetControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
     private final ObjectMapper mapper = new ObjectMapper();
+
+    private Token token;
 
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
-        var budget = new Budget(1L, BigDecimal.valueOf(100.00), 1, 2024, user);
-        var expense = new Expense(1L, BigDecimal.valueOf(100.00), "Groceries Expense", LocalDate.parse("2024-01-01"), "test", user);
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        token = authenticationHelperTest.registerUserTest();
 
-        userRepository.save(user);
-        budgetRepository.save(budget);
-        expenseRepository.save(expense);
+        var user = userRepository.findByUsername("test123");
+        if (user.isPresent()) {
+            var budget = new Budget(1L, BigDecimal.valueOf(100.00), 1, 2024, user.get());
+            var expense = new Expense(1L, BigDecimal.valueOf(100.00), "Groceries Expense", LocalDate.parse("2024-01-01"), "test", user.get());
+            budgetRepository.save(budget);
+            expenseRepository.save(expense);
+        }
     }
 
 
     @Test
     void whenRequestingBudgets_withValidUserId_returnsBudgetDetails() throws Exception {
-        // Given
-        Long userId = 1L;
 
         // When
-        var result = mockMvc.perform(get("/api/v1/budget/{userId}/budgets", userId))
+        var result = mockMvc.perform(get("/api/v1/budgets")
+                        .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -87,48 +98,8 @@ class BudgetControllerTest {
     }
 
     @Test
-    void whenRequestingBudgets_withInvalidUserId_throwsError() throws Exception {
-        // Given
-        Long userId = 0L;
-
-        // When
-        var result = mockMvc.perform(get("/api/v1/budget/{userId}", userId))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        String jsonContent = result.getResponse().getContentAsString();
-
-        ErrorResponse error = mapper.readValue(jsonContent, ErrorResponse.class);
-
-        // Then
-        assertThat(error).isInstanceOf(ErrorResponse.class);
-        assertThat(error.status()).isEqualTo(500);
-        assertThat(error.error()).isNotBlank();
-        assertThat(error.message()).isNotBlank();
-    }
-
-    @Test
     @Disabled("Temporarily disabled due to H2-PostgreSQL compatibility issues affecting test accuracy. Awaiting a workaround or solution.")
     void whenRequestingBudgetsVsExpense_withValidUserId_returnsBudgetsVsExpense() throws JsonProcessingException, Exception {
-        // Given
-        Long userId = 1L;
-        String date = "2024-01-01";
-
-        //When
-        var result = mockMvc.perform(get("/api/v1/budget/{userId}/budget-expense-check", userId)
-                        .param("date", date))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        String jsonContent = result.getResponse().getContentAsString();
-
-        var budgetVsExpenseDTO = mapper.readValue(jsonContent, BudgetExpensesDiff.class);
-
-        // Then
-        assertThat(budgetVsExpenseDTO.budget).isNotNull();
-        assertThat(budgetVsExpenseDTO.diff).isNotNull();
     }
 
     @Test
