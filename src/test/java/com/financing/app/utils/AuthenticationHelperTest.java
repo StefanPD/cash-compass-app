@@ -12,12 +12,12 @@ public class AuthenticationHelperTest {
     private TokenRepository tokenRepository;
 
     public Token registerUserTest() {
-        var registerRequest = new RegisterRequest(
-                "test123",
-                "test123",
-                "test@email.com"
-        );
         try {
+            var registerRequest = new RegisterRequest(
+                    "test123",
+                    "t",
+                    "test@email.com"
+            );
             var token = authenticationService.register(registerRequest);
             return new Token(
                     null,
