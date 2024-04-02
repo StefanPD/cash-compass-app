@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
-@ApiVersion("api/v1/user")
+@ApiVersion("api/v1/users")
 @Slf4j
 @AllArgsConstructor
 public class UserController {
@@ -22,9 +22,9 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserInfo> getUserById(@PathVariable("userId") @Min(1) Long userId) {
-        log.info("GET request received - api/v1/user/{userId}, for userId: {}", userId);
+        log.info("GET request received - api/v1/users/{userId}, for userId: {}", userId);
         var user = userService.fetchUserByUserId(userId).orElseThrow(() -> {
-            log.info("GET request failure - api/v1/user/{userId}, for userId: {}", userId);
+            log.info("GET request failure - api/v1/users/{userId}, for userId: {}", userId);
             return new EntityNotFoundException("User with this Id doesn't exist");
         });
         return ResponseEntity.ok(user);

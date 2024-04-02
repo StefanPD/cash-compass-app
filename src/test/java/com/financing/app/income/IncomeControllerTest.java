@@ -3,10 +3,14 @@ package com.financing.app.income;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.financing.app.auth.AuthenticationService;
+import com.financing.app.auth.Token;
+import com.financing.app.auth.TokenRepository;
 import com.financing.app.exception.ErrorResponse;
 import com.financing.app.user.Role;
 import com.financing.app.user.User;
 import com.financing.app.user.UserRepository;
+import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +46,29 @@ public class IncomeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
     private final ObjectMapper mapper = new ObjectMapper();
 
+    private Token token;
 
     @BeforeEach
     void setUp() {
-        var user = new User(1L, "test@email.com", "test", "test123", LocalDateTime.now(), LocalDateTime.now(), Role.USER);
-        userRepository.save(user);
-        IntStream.range(1, 12).forEach(idx -> {
-            var income = new Income(BigDecimal.valueOf(100), "test", LocalDate.of(2023, idx, 1), "test", user);
-            incomeRepository.save(income);
-        });
-        mapper.registerModule(new JavaTimeModule());
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        token = authenticationHelperTest.registerUserTest();
+        var user = userRepository.findByUsername("test123");
+        if(user.isPresent()){
+            IntStream.range(1, 12).forEach(idx -> {
+                var income = new Income(BigDecimal.valueOf(100), "test", LocalDate.of(2023, idx, 1), "test", user.get());
+                incomeRepository.save(income);
+            });
+            mapper.registerModule(new JavaTimeModule());
+        }
+
     }
 
     @Test
@@ -61,13 +76,14 @@ public class IncomeControllerTest {
         // Given
         var userId = 1L;
         // When
-        var result = mockMvc.perform(get("/api/v1/income/{userId}/incomes", userId))
+        var result = mockMvc.perform(get("/api/v1/incomes")
+                .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         var json = result.getResponse().getContentAsString();
-        List<Income> incomes = mapper.readValue(json, new TypeReference<>() {
-        });
+        List<Income> incomes = mapper.readValue(json, new TypeReference<>() {});
+
         var income = incomes.getFirst();
         // Then
         assertThat(incomes).isNotEmpty();
@@ -77,30 +93,14 @@ public class IncomeControllerTest {
     }
 
     @Test
-    void whenRequestingIncomes_withInvalidUserId_returnsNoIncomes() throws Exception {
-        // Given
-        var userId = 999999;
-        // When
-        var result = mockMvc.perform(get("/api/v1/income/{userId}/incomes", userId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-        var json = result.getResponse().getContentAsString();
-        List<Income> incomes = mapper.readValue(json, new TypeReference<>() {
-        });
-        // Then
-        assertThat(incomes).isEmpty();
-        ;
-    }
-
-    @Test
     void whenRequestingIncomeHistory_withValidUserIdAndDates_returnsHistory() throws Exception {
         // Given
         var userId = 1L;
         var start = LocalDate.of(2023, 1, 1);
         var end = LocalDate.of(2023, 12, 31);
         // When
-        var result = mockMvc.perform(get("/api/v1/income/{userId}/history", userId)
+        var result = mockMvc.perform(get("/api/v1/incomes/history")
+                        .header("Authorization", "Bearer " + token.getToken())
                         .param("startDate", start.toString())
                         .param("endDate", end.toString()))
                 .andExpect(status().isOk())
@@ -121,33 +121,12 @@ public class IncomeControllerTest {
     }
 
     @Test
-    void whenRequestingIncomeHistory_withInvalidUserIdAndDates_returnsNoHistory() throws Exception {
-        // Given
-        var userId = 9999999L;
-        var start = LocalDate.of(2023, 1, 1);
-        var end = LocalDate.of(2023, 12, 31);
-        // When
-        var result = mockMvc.perform(get("/api/v1/income/{userId}/history", userId)
-                        .param("startDate", start.toString())
-                        .param("endDate", end.toString()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-        var json = result.getResponse().getContentAsString();
-        Map<Integer, Map<String, List<IncomeDTO>>> history = mapper.readValue(json, new TypeReference<>() {
-        });
-        // Then
-        assertThat(history).isEmpty();
-    }
-
-    @Test
     void whenRequestingIncomeHistory_withValidUserIdAndStartDateAfterEndDate_returnsError() throws Exception {
-        // Given
-        var userId = 1L;
         var start = LocalDate.of(2023, 12, 31);
         var end = LocalDate.of(2023, 1, 1);
         // When
-        var result = mockMvc.perform(get("/api/v1/income/{userId}/history", userId)
+        var result = mockMvc.perform(get("/api/v1/incomes/history")
+                        .header("Authorization", "Bearer " + token.getToken())
                         .param("startDate", start.toString())
                         .param("endDate", end.toString()))
                 .andExpect(status().is4xxClientError())
@@ -165,8 +144,6 @@ public class IncomeControllerTest {
 
     @Test
     void whenPostingIncome_withValidIncome_returnsNoContentAndSavesRecord() throws Exception {
-        // Given
-        Long userId = 1L;
         var request = new IncomeRequest(
                 BigDecimal.valueOf(100),
                 "test",
@@ -175,7 +152,8 @@ public class IncomeControllerTest {
         );
         var json = mapper.writeValueAsString(request);
         // When
-        mockMvc.perform(post("/api/v1/income/{userId}/income", userId)
+        mockMvc.perform(post("/api/v1/incomes")
+                        .header("Authorization", "Bearer " + token.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNoContent());
@@ -197,7 +175,8 @@ public class IncomeControllerTest {
         );
         var json = mapper.writeValueAsString(request);
         // When
-        var result = mockMvc.perform(post("/api/v1/income/{userId}/income", userId)
+        var result = mockMvc.perform(post("/api/v1/incomes")
+                        .header("Authorization", "Bearer " + token.getToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is5xxServerError())
