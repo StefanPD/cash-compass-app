@@ -3,11 +3,11 @@ package com.financing.app.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.adapter.user.out.UserRepository;
-import com.financing.app.application.user.domain.model.UserDTO;
-import com.financing.app.application.auth.domain.service.AuthenticationUseCase;
-import com.financing.app.adapter.auth.out.persistence.Token;
-import com.financing.app.adapter.auth.out.persistence.TokenRepository;
+import com.financing.app.user.adapter.out.UserRepository;
+import com.financing.app.user.application.domain.model.UserDTO;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
 import com.financing.app.exception.ErrorResponse;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;

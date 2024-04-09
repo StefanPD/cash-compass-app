@@ -1,14 +1,13 @@
 package com.financing.app.security;
 
-import com.financing.app.application.auth.domain.model.AuthUtils;
-import com.financing.app.application.auth.domain.service.JwtService;
-import com.financing.app.application.auth.port.out.AuthPort;
+import com.financing.app.auth.application.domain.model.AuthUtils;
+import com.financing.app.auth.application.domain.service.JwtService;
+import com.financing.app.auth.application.port.out.AuthPort;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.NonNullApi;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

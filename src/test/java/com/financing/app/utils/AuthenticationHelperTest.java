@@ -1,11 +1,11 @@
 package com.financing.app.utils;
 
-import com.financing.app.adapter.auth.out.persistence.Token;
-import com.financing.app.adapter.auth.out.persistence.TokenRepository;
-import com.financing.app.adapter.auth.out.persistence.TokenType;
-import com.financing.app.application.auth.domain.service.AuthenticationUseCase;
-import com.financing.app.application.auth.port.in.RegisterRequest;
-import com.financing.app.adapter.user.out.User;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.adapter.out.persistence.TokenType;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.auth.application.port.in.RegisterRequest;
+import com.financing.app.user.adapter.out.User;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
