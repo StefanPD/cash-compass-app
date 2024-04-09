@@ -3,15 +3,14 @@ package com.financing.app.savings.goals;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.auth.AuthenticationService;
-import com.financing.app.auth.Token;
-import com.financing.app.auth.TokenRepository;
-import com.financing.app.exception.ErrorResponse;
-import com.financing.app.user.Role;
-import com.financing.app.user.User;
-import com.financing.app.user.UserRepository;
+import com.financing.app.adapter.savings_goals.out.persistence.SavingsGoal;
+import com.financing.app.adapter.savings_goals.out.persistence.SavingsGoalRepository;
+import com.financing.app.application.savings_goals.port.in.SavingGoalInfo;
+import com.financing.app.application.auth.domain.service.AuthenticationUseCase;
+import com.financing.app.adapter.auth.out.persistence.Token;
+import com.financing.app.adapter.auth.out.persistence.TokenRepository;
+import com.financing.app.adapter.user.out.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +44,7 @@ class SavingsGoalsControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationUseCase authenticationUseCase;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -56,7 +54,7 @@ class SavingsGoalsControllerTest {
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationUseCase, tokenRepository);
         token = authenticationHelperTest.registerUserTest();
         var user = userRepository.findByUsername("test123");
         if (user.isPresent()) {

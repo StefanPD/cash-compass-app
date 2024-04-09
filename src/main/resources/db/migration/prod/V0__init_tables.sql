@@ -1,13 +1,12 @@
 create table if not exists users
 (
-    user_id       serial
-        primary key,
+    user_id       serial primary key,
     username      varchar(255) not null,
-    email         varchar(255) not null
-        unique,
+    email         varchar(255) not null unique,
     password_hash varchar(255) not null,
     created_at    timestamp with time zone default CURRENT_TIMESTAMP,
-    updated_at    timestamp with time zone default CURRENT_TIMESTAMP
+    updated_at    timestamp with time zone default CURRENT_TIMESTAMP,
+    role          varchar(255) not null    default 'user'
 );
 
 comment on table users is 'Table for storing user information, including login credentials and profile details.';
