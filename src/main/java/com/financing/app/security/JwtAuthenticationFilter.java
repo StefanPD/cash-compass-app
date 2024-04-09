@@ -1,8 +1,8 @@
 package com.financing.app.security;
 
-import com.financing.app.auth.AuthUtils;
-import com.financing.app.auth.JwtService;
-import com.financing.app.auth.TokenRepository;
+import com.financing.app.auth.application.domain.model.AuthUtils;
+import com.financing.app.auth.application.domain.service.JwtService;
+import com.financing.app.auth.application.port.out.AuthPort;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
+    private final AuthPort authPort;
 
     @Override
     protected void doFilterInternal(
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var username = jwtService.extractUsername(jwt.get());
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            var isTokenValid = tokenRepository.findByToken(jwt.get())
+            var isTokenValid = authPort.findByToken(jwt.get())
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
             if (jwtService.isTokenValid(jwt.get(), userDetails) && isTokenValid) {

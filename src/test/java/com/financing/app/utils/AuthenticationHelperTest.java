@@ -1,13 +1,17 @@
 package com.financing.app.utils;
 
-import com.financing.app.auth.*;
-import com.financing.app.user.User;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.adapter.out.persistence.TokenType;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.auth.application.port.in.RegisterRequest;
+import com.financing.app.user.adapter.out.User;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class AuthenticationHelperTest {
 
-    private AuthenticationService authenticationService;
+    private AuthenticationUseCase authenticationUseCase;
 
     private TokenRepository tokenRepository;
 
@@ -18,7 +22,7 @@ public class AuthenticationHelperTest {
                     "t",
                     "test@email.com"
             );
-            var token = authenticationService.register(registerRequest);
+            var token = authenticationUseCase.register(registerRequest);
             return new Token(
                     null,
                     token.jwtToken(),

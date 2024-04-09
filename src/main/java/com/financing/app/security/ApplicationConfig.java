@@ -1,6 +1,6 @@
 package com.financing.app.security;
 
-import com.financing.app.user.UserRepository;
+import com.financing.app.user.adapter.out.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

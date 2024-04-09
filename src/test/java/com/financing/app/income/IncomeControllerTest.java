@@ -3,13 +3,16 @@ package com.financing.app.income;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.auth.AuthenticationService;
-import com.financing.app.auth.Token;
-import com.financing.app.auth.TokenRepository;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.income.adapter.out.persistence.Income;
+import com.financing.app.income.adapter.out.persistence.IncomeRepository;
+import com.financing.app.user.adapter.out.User;
+import com.financing.app.user.adapter.out.UserRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.income.application.domain.model.IncomeDTO;
+import com.financing.app.income.application.port.in.IncomeRequest;
 import com.financing.app.exception.ErrorResponse;
-import com.financing.app.user.Role;
-import com.financing.app.user.User;
-import com.financing.app.user.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -47,7 +49,7 @@ public class IncomeControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationUseCase authenticationUseCase;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -58,10 +60,10 @@ public class IncomeControllerTest {
 
     @BeforeEach
     void setUp() {
-        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationUseCase, tokenRepository);
         token = authenticationHelperTest.registerUserTest();
         var user = userRepository.findByUsername("test123");
-        if(user.isPresent()){
+        if (user.isPresent()) {
             IntStream.range(1, 12).forEach(idx -> {
                 var income = new Income(BigDecimal.valueOf(100), "test", LocalDate.of(2023, idx, 1), "test", user.get());
                 incomeRepository.save(income);
@@ -73,16 +75,15 @@ public class IncomeControllerTest {
 
     @Test
     void whenRequestingIncomes_withValidUserId_returnsIncomes() throws Exception {
-        // Given
-        var userId = 1L;
         // When
         var result = mockMvc.perform(get("/api/v1/incomes")
-                .header("Authorization", "Bearer " + token.getToken()))
+                        .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         var json = result.getResponse().getContentAsString();
-        List<Income> incomes = mapper.readValue(json, new TypeReference<>() {});
+        List<Income> incomes = mapper.readValue(json, new TypeReference<>() {
+        });
 
         var income = incomes.getFirst();
         // Then
@@ -94,8 +95,7 @@ public class IncomeControllerTest {
 
     @Test
     void whenRequestingIncomeHistory_withValidUserIdAndDates_returnsHistory() throws Exception {
-        // Given
-        var userId = 1L;
+
         var start = LocalDate.of(2023, 1, 1);
         var end = LocalDate.of(2023, 12, 31);
         // When
@@ -159,14 +159,13 @@ public class IncomeControllerTest {
                 .andExpect(status().isNoContent());
         var incomes = incomeRepository.findIncomesByUser(new User(1L));
         // Then
+        assertThat(incomes.size()).isEqualTo(12);
         assertThat(incomes.getLast().source()).isEqualTo("test");
         assertThat(incomes.getLast().description()).isEqualTo("test");
     }
 
     @Test
     void whenPostingIncome_withInvalidIncome_returnsError() throws Exception {
-        // Given
-        Long userId = 1L;
         var request = new IncomeRequest(
                 BigDecimal.valueOf(100),
                 null,

@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.auth.AuthenticationResponse;
-import com.financing.app.auth.AuthenticationService;
-import com.financing.app.auth.Token;
-import com.financing.app.auth.TokenRepository;
-import com.financing.app.expenses.Expense;
-import com.financing.app.expenses.ExpenseRepository;
-import com.financing.app.user.UserRepository;
+import com.financing.app.budget.adapter.out.persistence.Budget;
+import com.financing.app.budget.adapter.out.persistence.BudgetRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.expenses.adapter.out.persistence.Expense;
+import com.financing.app.expenses.adapter.out.persistence.ExpenseRepository;
+import com.financing.app.user.adapter.out.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -50,7 +51,7 @@ class BudgetControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationUseCase authenticationUseCase;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -62,7 +63,7 @@ class BudgetControllerTest {
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
-        var authenticationHelperTest = new AuthenticationHelperTest(authenticationService, tokenRepository);
+        var authenticationHelperTest = new AuthenticationHelperTest(authenticationUseCase, tokenRepository);
         token = authenticationHelperTest.registerUserTest();
 
         var user = userRepository.findByUsername("test123");
