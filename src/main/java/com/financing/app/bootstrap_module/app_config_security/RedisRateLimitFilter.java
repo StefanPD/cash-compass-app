@@ -1,6 +1,6 @@
-package com.financing.app.app_config_security;
+package com.financing.app.bootstrap_module.app_config_security;
 
-import com.financing.app.exception.ErrorResponse;
+import com.financing.app.bootstrap_module.exception.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

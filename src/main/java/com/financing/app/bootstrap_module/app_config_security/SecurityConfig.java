@@ -1,6 +1,7 @@
-package com.financing.app.app_config_security;
+package com.financing.app.bootstrap_module.app_config_security;
 
 
+import com.financing.app.auth.application.domain.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

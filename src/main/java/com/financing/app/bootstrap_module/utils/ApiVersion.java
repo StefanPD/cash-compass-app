@@ -1,4 +1,4 @@
-package com.financing.app.utils;
+package com.financing.app.bootstrap_module.utils;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.core.annotation.AliasFor;

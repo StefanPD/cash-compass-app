@@ -6,7 +6,7 @@ import com.financing.app.expenses.application.port.in.ExpenseInfo;
 import com.financing.app.expenses.application.port.in.ExpensePage;
 import com.financing.app.expenses.application.port.in.ExpenseRequest;
 import com.financing.app.user.application.domain.service.UserIdentityProviderUseCase;
-import com.financing.app.utils.ApiVersion;
+import com.financing.app.bootstrap_module.utils.ApiVersion;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

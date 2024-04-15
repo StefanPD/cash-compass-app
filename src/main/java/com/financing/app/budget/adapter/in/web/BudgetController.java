@@ -4,7 +4,7 @@ import com.financing.app.budget.application.domain.service.BudgetUseCase;
 import com.financing.app.budget.application.port.in.BudgetExpensesDiff;
 import com.financing.app.budget.application.port.in.BudgetInfo;
 import com.financing.app.user.application.domain.service.UserIdentityProviderUseCase;
-import com.financing.app.utils.ApiVersion;
+import com.financing.app.bootstrap_module.utils.ApiVersion;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
