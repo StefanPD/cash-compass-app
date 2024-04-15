@@ -1,10 +1,10 @@
 package com.financing.app.expenses.adapter.out.persistence;
 
-import com.financing.app.user.adapter.out.User;
 import com.financing.app.expenses.application.domain.model.ExpenseDTO;
 import com.financing.app.expenses.application.port.in.ExpenseInfo;
 import com.financing.app.expenses.application.port.in.ExpensePage;
 import com.financing.app.expenses.application.port.out.LoadExpensePort;
+import com.financing.app.user.adapter.out.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -39,7 +39,7 @@ public class ExpensePersistenceAdapter implements LoadExpensePort {
 
     @Override
     public BigDecimal loadExpenseAvgForSpecificMonth(Long userId, int year, int month) {
-        return null;
+        return expenseRepository.calculateExpenseForSpecificMonth(userId, year, month);
     }
 
     @Override

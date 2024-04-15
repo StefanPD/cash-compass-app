@@ -23,6 +23,7 @@ public class BudgetUseCase {
         return loadBudgetPort.loadBudget(new User(userId));
     }
 
+    //TODO : Make this function return empty list in case there is no entities for specific date
     @Transactional
     public BudgetExpensesDiff fetchBudgetsVsExpense(Long userId, LocalDate date) throws EntityNotFoundException {
         var month = date.getMonthValue();
