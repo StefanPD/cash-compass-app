@@ -1,4 +1,4 @@
-package com.financing.app.security;
+package com.financing.app.app_config_security;
 
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final RedisRateLimitFilter redisRateLimitFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,6 +33,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(redisRateLimitFilter,UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

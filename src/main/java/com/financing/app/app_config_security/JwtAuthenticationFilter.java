@@ -1,4 +1,4 @@
-package com.financing.app.security;
+package com.financing.app.app_config_security;
 
 import com.financing.app.auth.application.domain.model.AuthUtils;
 import com.financing.app.auth.application.domain.service.JwtService;
