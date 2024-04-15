@@ -2,7 +2,7 @@ package com.financing.app.user.adapter.in.web;
 
 import com.financing.app.user.application.domain.service.UserUseCase;
 import com.financing.app.user.application.port.in.UserInfo;
-import com.financing.app.utils.ApiVersion;
+import com.financing.app.bootstrap_module.utils.ApiVersion;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;

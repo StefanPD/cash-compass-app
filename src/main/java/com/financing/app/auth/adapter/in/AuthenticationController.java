@@ -4,7 +4,7 @@ import com.financing.app.auth.application.port.in.AuthenticationRequest;
 import com.financing.app.auth.application.port.in.AuthenticationResponse;
 import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.auth.application.port.in.RegisterRequest;
-import com.financing.app.utils.ApiVersion;
+import com.financing.app.bootstrap_module.utils.ApiVersion;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;

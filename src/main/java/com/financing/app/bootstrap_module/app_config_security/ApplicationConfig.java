@@ -1,4 +1,4 @@
-package com.financing.app.app_config_security;
+package com.financing.app.bootstrap_module.app_config_security;
 
 import com.financing.app.user.adapter.out.UserRepository;
 import lombok.RequiredArgsConstructor;

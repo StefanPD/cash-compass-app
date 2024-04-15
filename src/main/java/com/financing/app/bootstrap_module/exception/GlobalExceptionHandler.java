@@ -1,4 +1,4 @@
-package com.financing.app.exception;
+package com.financing.app.bootstrap_module.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

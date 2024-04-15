@@ -12,7 +12,7 @@ import com.financing.app.user.adapter.out.UserRepository;
 import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.income.application.domain.model.IncomeDTO;
 import com.financing.app.income.application.port.in.IncomeRequest;
-import com.financing.app.exception.ErrorResponse;
+import com.financing.app.bootstrap_module.exception.ErrorResponse;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

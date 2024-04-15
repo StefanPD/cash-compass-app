@@ -6,7 +6,7 @@ import com.financing.app.income.application.port.in.IncomeDateTransformer;
 import com.financing.app.income.application.port.in.IncomeInfo;
 import com.financing.app.income.application.port.in.IncomeRequest;
 import com.financing.app.user.application.domain.service.UserIdentityProviderUseCase;
-import com.financing.app.utils.ApiVersion;
+import com.financing.app.bootstrap_module.utils.ApiVersion;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

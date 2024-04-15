@@ -5,7 +5,7 @@ import com.financing.app.savings_goals.application.port.in.SavingGoalInfo;
 import com.financing.app.savings_goals.application.domain.model.SavingsGoalDTO;
 import com.financing.app.savings_goals.application.port.in.SavingsGoalUpdateRequest;
 import com.financing.app.user.application.domain.service.UserIdentityProviderUseCase;
-import com.financing.app.utils.ApiVersion;
+import com.financing.app.bootstrap_module.utils.ApiVersion;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
