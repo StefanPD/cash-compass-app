@@ -5,14 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.financing.app.auth.adapter.out.persistence.Token;
 import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.bootstrap_module.exception.ErrorResponse;
 import com.financing.app.income.adapter.out.persistence.Income;
 import com.financing.app.income.adapter.out.persistence.IncomeRepository;
-import com.financing.app.user.adapter.out.User;
-import com.financing.app.user.adapter.out.UserRepository;
-import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.income.application.domain.model.IncomeDTO;
 import com.financing.app.income.application.port.in.IncomeRequest;
-import com.financing.app.bootstrap_module.exception.ErrorResponse;
+import com.financing.app.user.adapter.out.User;
+import com.financing.app.user.adapter.out.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = {com.financing.app.bootstrap_module.AppApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class IncomeControllerTest {
@@ -159,7 +159,7 @@ public class IncomeControllerTest {
                 .andExpect(status().isNoContent());
         var incomes = incomeRepository.findIncomesByUser(new User(1L));
         // Then
-        assertThat(incomes.size()).isEqualTo(12);
+        assertThat(incomes.size()).isEqualTo(45);
         assertThat(incomes.getLast().source()).isEqualTo("test");
         assertThat(incomes.getLast().description()).isEqualTo("test");
     }

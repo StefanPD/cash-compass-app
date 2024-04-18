@@ -1,9 +1,9 @@
 package com.financing.app.expenses.application.port.out;
 
-import com.financing.app.user.adapter.out.User;
 import com.financing.app.expenses.application.domain.model.ExpenseDTO;
 import com.financing.app.expenses.application.port.in.ExpenseInfo;
 import com.financing.app.expenses.application.port.in.ExpensePage;
+import com.financing.app.user.adapter.out.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,4 +18,6 @@ public interface LoadExpensePort {
     BigDecimal loadExpenseAvgForSpecificMonth(Long userId, int year, int month);
 
     void saveExpense(User user, ExpenseDTO expenseDto);
+
+    List<ExpenseInfo> loadMonthlyOverview(User user, LocalDate date);
 }

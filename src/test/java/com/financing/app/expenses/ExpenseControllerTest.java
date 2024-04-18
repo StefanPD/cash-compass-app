@@ -3,13 +3,17 @@ package com.financing.app.expenses;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.bootstrap_module.exception.ErrorResponse;
+import com.financing.app.budget.adapter.out.persistence.Budget;
+import com.financing.app.budget.adapter.out.persistence.BudgetRepository;
 import com.financing.app.expenses.adapter.out.persistence.Expense;
 import com.financing.app.expenses.adapter.out.persistence.ExpenseRepository;
 import com.financing.app.expenses.application.domain.model.ExpenseDTO;
 import com.financing.app.expenses.application.port.in.ExpenseRequest;
-import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
-import com.financing.app.auth.adapter.out.persistence.Token;
-import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.expenses.application.port.in.MonthlyOverview;
 import com.financing.app.user.adapter.out.User;
 import com.financing.app.user.adapter.out.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
@@ -32,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = {com.financing.app.bootstrap_module.AppApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ExpenseControllerTest {
@@ -51,6 +55,10 @@ class ExpenseControllerTest {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
+
     private final ObjectMapper mapper = new ObjectMapper();
 
     private Token token;
@@ -63,7 +71,9 @@ class ExpenseControllerTest {
         var user = userRepository.findByUsername("test123");
         if (user.isPresent()) {
             var expense = new Expense(1L, BigDecimal.valueOf(100.00), "Groceries Expense", LocalDate.parse("2024-01-01"), "test", user.get());
+            var budget = new Budget(1L, BigDecimal.valueOf(100.00), 1, 2024, user.get());
             expenseRepository.save(expense);
+            budgetRepository.save(budget);
         }
     }
 
@@ -131,5 +141,46 @@ class ExpenseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(expenseRequestJson))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void whenRequestingMonthlyOverview_withValidDate_returnsSuccessMonthlyOverview() throws Exception {
+        // When
+        var date = LocalDate.of(2024, 1, 1);
+        var result = mockMvc.perform(get("/api/v1/expenses/monthly-overview")
+                        .header("Authorization", "Bearer " + token.getToken())
+                        .param("date", date.toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        String jsonContent = result.getResponse().getContentAsString();
+
+        MonthlyOverview monthlyOverview = mapper.readValue(jsonContent, MonthlyOverview.class);
+
+        // Then
+        assertThat(monthlyOverview.budgetInfo()).isNotNull();
+        assertThat(monthlyOverview.expenses()).isNotEmpty();
+        assertThat(monthlyOverview.expenses().size()).isEqualTo(1);
+    }
+
+    @Test
+    void whenRequestingMonthlyOverview_withInvalidDate_returnsError() throws Exception {
+        // When
+        var date = "01-01-1111";
+        var result = mockMvc.perform(get("/api/v1/expenses/monthly-overview")
+                        .header("Authorization", "Bearer " + token.getToken())
+                        .param("date", date))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        String jsonContent = result.getResponse().getContentAsString();
+        var error = mapper.readValue(jsonContent, ErrorResponse.class);
+        // Then
+        assertThat(error).isInstanceOf(ErrorResponse.class);
+        assertThat(error.status()).isEqualTo(500);
+        assertThat(error.error()).isNotBlank();
+        assertThat(error.message()).isNotBlank();
     }
 }

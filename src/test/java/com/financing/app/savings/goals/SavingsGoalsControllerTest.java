@@ -3,12 +3,12 @@ package com.financing.app.savings.goals;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.financing.app.auth.adapter.out.persistence.Token;
+import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.savings_goals.adapter.out.persistence.SavingsGoal;
 import com.financing.app.savings_goals.adapter.out.persistence.SavingsGoalRepository;
 import com.financing.app.savings_goals.application.port.in.SavingGoalInfo;
-import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
-import com.financing.app.auth.adapter.out.persistence.Token;
-import com.financing.app.auth.adapter.out.persistence.TokenRepository;
 import com.financing.app.user.adapter.out.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = {com.financing.app.bootstrap_module.AppApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class SavingsGoalsControllerTest {
@@ -67,7 +67,7 @@ class SavingsGoalsControllerTest {
     void whenRequestingSavingGoals_withValidUserId_returnsSavingGoals() throws Exception {
         // When
         var result = mockMvc.perform(get("/api/v1/saving-goals")
-                .header("Authorization", "Bearer " + token.getToken()))
+                        .header("Authorization", "Bearer " + token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

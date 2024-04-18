@@ -52,4 +52,9 @@ public class ExpensePersistenceAdapter implements LoadExpensePort {
             throw new EntityNotFoundException("User with this Id doesn't exist");
         }
     }
+
+    @Override
+    public List<ExpenseInfo> loadMonthlyOverview(User user, LocalDate date) {
+        return expenseRepository.findExpensesByUserAndExpenseDate(user, date);
+    }
 }

@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,22 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisRateLimitFilter extends OncePerRequestFilter {
 
+    @Value("${rate-limiting.enabled:true}")
+    private boolean isRateLimiterEnabled;
     private final RedisTemplate<String, String> redisTemplate;
     private final ValueOperations<String, String> valueOperations;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (!isRateLimiterEnabled) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         var key = "rate_limit:" + request.getRemoteAddr();
 
         var requestCount = valueOperations.increment(key);
-        if (requestCount == null){
+        if (requestCount == null) {
             filterChain.doFilter(request, response);
             return;
         }
