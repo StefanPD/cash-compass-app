@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -20,4 +21,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     @Query(value = "SELECT sum(amount) FROM expenses WHERE user_id = :userId AND EXTRACT(YEAR FROM expense_date) = :year AND EXTRACT(MONTH FROM expense_date) = :month", nativeQuery = true)
     BigDecimal calculateExpenseForSpecificMonth(Long userId, int year, int month);
+
+    List<ExpenseInfo> findExpensesByUserAndExpenseDate(User user, LocalDate expenseDate);
 }

@@ -3,12 +3,12 @@ package com.financing.app.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.user.adapter.out.UserRepository;
-import com.financing.app.user.application.domain.model.UserDTO;
-import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.auth.adapter.out.persistence.Token;
 import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.bootstrap_module.exception.ErrorResponse;
+import com.financing.app.user.adapter.out.UserRepository;
+import com.financing.app.user.application.domain.model.UserDTO;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(classes = {com.financing.app.bootstrap_module.AppApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class UserControllerTest {

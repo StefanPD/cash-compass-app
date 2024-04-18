@@ -1,5 +1,9 @@
 package com.financing.app.bootstrap_module.app_config_security;
 
+import com.financing.app.budget.adapter.out.persistence.BudgetMapper;
+import com.financing.app.budget.adapter.out.persistence.BudgetPersistenceAdapter;
+import com.financing.app.budget.adapter.out.persistence.BudgetRepository;
+import com.financing.app.expenses.application.port.out.LoadBudgetPortInterface;
 import com.financing.app.user.adapter.out.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository repository;
+
+    private final BudgetRepository budgetRepository;
+    private final BudgetMapper budgetMapper;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -41,6 +48,11 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public LoadBudgetPortInterface loadBudgetPortInterface() {
+        return new BudgetPersistenceAdapter(budgetRepository, budgetMapper);
     }
 
 }

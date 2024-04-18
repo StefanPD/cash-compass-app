@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.financing.app.budget.adapter.out.persistence.Budget;
-import com.financing.app.budget.adapter.out.persistence.BudgetRepository;
-import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.auth.adapter.out.persistence.Token;
 import com.financing.app.auth.adapter.out.persistence.TokenRepository;
+import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
+import com.financing.app.budget.adapter.out.persistence.Budget;
+import com.financing.app.budget.adapter.out.persistence.BudgetRepository;
 import com.financing.app.expenses.adapter.out.persistence.Expense;
 import com.financing.app.expenses.adapter.out.persistence.ExpenseRepository;
 import com.financing.app.user.adapter.out.UserRepository;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest
+@SpringBootTest(classes = {com.financing.app.bootstrap_module.AppApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class BudgetControllerTest {
