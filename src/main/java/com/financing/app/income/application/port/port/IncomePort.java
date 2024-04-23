@@ -15,4 +15,8 @@ public interface IncomePort {
     List<IncomeDTO> loadIncomeHistory(User user, LocalDate startDate, LocalDate endDate);
 
     void saveIncome(User user, IncomeDTO incomeDTO);
+
+    void updateIncome(User user, IncomeDTO incomeDTO);
+
+    void deleteIncome(User user, Long incomeId);
 }

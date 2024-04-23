@@ -7,6 +7,7 @@ import com.financing.app.expenses.application.port.in.ExpensePage;
 import com.financing.app.expenses.application.port.in.MonthlyOverview;
 import com.financing.app.expenses.application.port.out.LoadBudgetPortInterface;
 import com.financing.app.expenses.application.port.out.LoadExpensePort;
+import com.financing.app.income.application.domain.model.IncomeDTO;
 import com.financing.app.user.adapter.out.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -58,4 +59,13 @@ public class ExpenseUseCase {
         return new MonthlyOverview(budgetInfo, expenses);
     }
 
+    @Transactional
+    public void deleteExpense(User user, Long expenseId){
+        loadExpensePort.deleteExpense(user, expenseId);
+    }
+
+    @Transactional
+    public void updateExpense(User user, ExpenseDTO expenseDTO) {
+        loadExpensePort.updateExpense(user, expenseDTO);
+    }
 }

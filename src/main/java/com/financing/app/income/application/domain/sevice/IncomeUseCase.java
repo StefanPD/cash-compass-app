@@ -34,4 +34,14 @@ public class IncomeUseCase {
     public void saveIncome(Long userId, IncomeDTO incomeDTO) throws EntityNotFoundException {
         incomePort.saveIncome(new User(userId), incomeDTO);
     }
+
+    @Transactional
+    public void updateIncome(User user, IncomeDTO incomeDTO) {
+        incomePort.updateIncome(user, incomeDTO);
+    }
+
+    @Transactional
+    public void deleteIncome(User user, Long incomeId) {
+        incomePort.deleteIncome(user,incomeId);
+    }
 }

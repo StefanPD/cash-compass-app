@@ -7,9 +7,11 @@ import com.financing.app.expenses.application.port.out.LoadBudgetPortInterface;
 import com.financing.app.user.adapter.out.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +30,43 @@ public class BudgetPersistenceAdapter implements LoadBudgetPort, LoadBudgetPortI
         var budget = budgetRepository.findByUserAndYearAndMonth(user, year, month)
                 .orElseThrow(() -> new EntityNotFoundException("Budget not found for specific criteria"));
         return budgetMapper.fromBudgetToBudgetDTO(budget);
+    }
+
+    @Override
+    public void saveBudget(User user, BudgetDTO budgetDTO) {
+        var budget = budgetMapper.fromBudgetDTOtoBudget(budgetDTO);
+        budget.setUser(user);
+        budgetRepository.save(budget);
+    }
+
+    @Override
+    public void deleteBudget(User user, Long budgetId) throws EntityNotFoundException {
+        budgetRepository
+                .findById(budgetId)
+                .map(item -> {
+                    if (!Objects.equals(user.getUserId(), item.getUser().getUserId())) {
+                        throw new EntityNotFoundException("Entity not found");
+                    }
+                    budgetRepository.delete(item);
+                    return item;
+                })
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public void updateBudget(User user, BudgetDTO budgetDTO)throws EntityNotFoundException {
+        budgetRepository
+                .findById(budgetDTO.getBudgetId())
+                .map(item -> {
+                    if (!Objects.equals(item.getUser().getUserId(), user.getUserId())) {
+                        throw new EntityNotFoundException("Entity not found");
+                    }
+                    item.setTotalBudget(budgetDTO.getTotalBudget());
+                    item.setYear(budgetDTO.getYear());
+                    item.setMonth(budgetDTO.getMonth());
+                    return budgetRepository.save(item);
+                })
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

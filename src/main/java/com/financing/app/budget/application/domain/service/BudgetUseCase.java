@@ -1,5 +1,6 @@
 package com.financing.app.budget.application.domain.service;
 
+import com.financing.app.budget.application.domain.model.BudgetDTO;
 import com.financing.app.user.adapter.out.User;
 import com.financing.app.budget.application.port.in.BudgetExpensesDiff;
 import com.financing.app.budget.application.port.in.BudgetInfo;
@@ -32,5 +33,17 @@ public class BudgetUseCase {
         var totalExpenses = loadExpensePort.loadExpenseAvgForSpecificMonth(userId, year, month);
         var difference = budget.getTotalBudget().subtract(totalExpenses);
         return new BudgetExpensesDiff(budget, difference);
+    }
+
+    public void saveBudget(Long userId, BudgetDTO budget) {
+        loadBudgetPort.saveBudget(new User(userId),budget);
+    }
+
+    public void deleteBudget(Long userId, Long budgetId) {
+        loadBudgetPort.deleteBudget(new User(userId), budgetId);
+    }
+
+    public void updateBudget(Long userId, BudgetDTO budget) {
+        loadBudgetPort.updateBudget(new User((userId)), budget);
     }
 }
