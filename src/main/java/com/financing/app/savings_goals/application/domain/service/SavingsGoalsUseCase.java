@@ -1,5 +1,6 @@
 package com.financing.app.savings_goals.application.domain.service;
 
+import com.financing.app.expenses.application.domain.model.ExpenseDTO;
 import com.financing.app.user.adapter.out.User;
 import com.financing.app.savings_goals.application.domain.model.SavingsGoalDTO;
 import com.financing.app.savings_goals.application.port.in.SavingGoalInfo;
@@ -23,12 +24,16 @@ public class SavingsGoalsUseCase {
     }
 
     @Transactional
-    public void updateSavingsGoal(SavingsGoalDTO savingsGoal) throws EntityNotFoundException {
-        savingsGoalsPort.updateSavingsGoal(savingsGoal);
+    public void updateSavingsGoal(User user, SavingsGoalDTO savingsGoal) throws EntityNotFoundException {
+        savingsGoalsPort.updateSavingsGoal(user, savingsGoal);
     }
 
     @Transactional
     public void deleteSavingsGoalWithIds(Long userId, Long savingGoalId) throws EntityNotFoundException {
         savingsGoalsPort.deleteSavingsGoal(new User(userId), savingGoalId);
+    }
+
+    public void saveSavingsGoals(User user, SavingsGoalDTO savingsGoalDTO) {
+        savingsGoalsPort.saveSavingsGoals(user, savingsGoalDTO);
     }
 }

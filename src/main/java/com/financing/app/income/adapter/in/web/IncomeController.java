@@ -5,6 +5,7 @@ import com.financing.app.income.application.domain.sevice.IncomeUseCase;
 import com.financing.app.income.application.port.in.IncomeDateTransformer;
 import com.financing.app.income.application.port.in.IncomeInfo;
 import com.financing.app.income.application.port.in.IncomeRequest;
+import com.financing.app.income.application.port.in.IncomeUpdateRequest;
 import com.financing.app.user.application.domain.service.UserIdentityProviderUseCase;
 import com.financing.app.bootstrap_module.utils.ApiVersion;
 import jakarta.validation.Valid;
@@ -38,7 +39,7 @@ public class IncomeController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomesByUserId(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+    public ResponseEntity<Map<Integer, Map<String, List<IncomeDTO>>>> getIncomeHistory(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
         var user = userIdentityProviderUseCase.getAuthenticatedUser();
@@ -72,6 +73,24 @@ public class IncomeController {
         );
         incomeUseCase.saveIncome(user.getUserId(), incomeDto);
         log.info("Income saved - api/v1/incomes, for userId: {}, income: {}", user.getUserId(), incomeRequest);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateIncome(@Valid @RequestBody IncomeUpdateRequest incomeUpdateRequest){
+        var user = userIdentityProviderUseCase.getAuthenticatedUser();
+        log.info("PUT request received - api/v1/incomes, for userId: {}, income: {}", user.getUserId(), incomeUpdateRequest);
+        var incomeDTO = new IncomeDTO(incomeUpdateRequest);
+        incomeUseCase.updateIncome(user, incomeDTO);
+        log.info("Income updated - api/v1/incomes, for userId: {}, income: {}", user.getUserId(), incomeUpdateRequest);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteIncome(@Valid @RequestParam Long incomeId) {
+        var user = userIdentityProviderUseCase.getAuthenticatedUser();
+        log.info("Received DELETE request - api/v1/incomes, for userId: {}", user.getUserId());
+        incomeUseCase.deleteIncome(user, incomeId);
         return ResponseEntity.noContent().build();
     }
 }

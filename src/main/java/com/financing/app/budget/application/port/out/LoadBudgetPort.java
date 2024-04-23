@@ -11,4 +11,10 @@ public interface LoadBudgetPort {
     List<BudgetInfo> loadBudget(User user);
 
     BudgetDTO loadBudgetByYearAndMonth(User user, int year, int month);
+
+    void saveBudget(User user, BudgetDTO budget);
+
+    void deleteBudget(User user, Long budgetId);
+
+    void updateBudget(User user, BudgetDTO budgetDTO);
 }

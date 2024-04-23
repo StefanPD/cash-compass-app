@@ -4,6 +4,7 @@ import com.financing.app.expenses.application.domain.model.ExpenseDTO;
 import com.financing.app.expenses.application.port.in.ExpenseInfo;
 import com.financing.app.expenses.application.port.in.ExpensePage;
 import com.financing.app.expenses.application.port.out.LoadExpensePort;
+import com.financing.app.income.application.domain.model.IncomeDTO;
 import com.financing.app.user.adapter.out.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -56,5 +58,36 @@ public class ExpensePersistenceAdapter implements LoadExpensePort {
     @Override
     public List<ExpenseInfo> loadMonthlyOverview(User user, LocalDate date) {
         return expenseRepository.findExpensesByUserAndExpenseDate(user, date);
+    }
+
+    @Override
+    public void deleteExpense(User user, Long expenseId) throws EntityNotFoundException {
+        expenseRepository
+                .findById(expenseId)
+                .map(item -> {
+                    if (!Objects.equals(user.getUserId(), item.getUser().getUserId())) {
+                        throw new EntityNotFoundException("Entity not found");
+                    }
+                    expenseRepository.delete(item);
+                    return item;
+                })
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public void updateExpense(User user, ExpenseDTO expenseDTO) {
+        expenseRepository
+                .findById(expenseDTO.getExpensesId())
+                .map(item -> {
+                    if (!Objects.equals(item.getUser().getUserId(), user.getUserId())) {
+                        throw new EntityNotFoundException("Entity not found");
+                    }
+                    item.setAmount(expenseDTO.getAmount());
+                    item.setExpenseDate(expenseDTO.getExpenseDate());
+                    item.setCategory(expenseDTO.getCategory());
+                    item.setDescription(expenseDTO.getDescription());
+                    return expenseRepository.save(item);
+                })
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

@@ -3,10 +3,9 @@ package com.financing.app.expenses.adapter.in.web;
 import com.financing.app.bootstrap_module.utils.ApiVersion;
 import com.financing.app.expenses.application.domain.model.ExpenseDTO;
 import com.financing.app.expenses.application.domain.service.ExpenseUseCase;
-import com.financing.app.expenses.application.port.in.ExpenseInfo;
-import com.financing.app.expenses.application.port.in.ExpensePage;
-import com.financing.app.expenses.application.port.in.ExpenseRequest;
-import com.financing.app.expenses.application.port.in.MonthlyOverview;
+import com.financing.app.expenses.application.port.in.*;
+import com.financing.app.income.application.domain.model.IncomeDTO;
+import com.financing.app.income.application.port.in.IncomeUpdateRequest;
 import com.financing.app.user.application.domain.service.UserIdentityProviderUseCase;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -67,5 +66,23 @@ public class ExpenseController {
         log.info("GET request received - api/v1/expenses/monthly-overview, for userId: {}", user.getUserId());
         var monthlyOverview = expenseUseCase.fetchMonthlyOverview(user, date);
         return ResponseEntity.ok(monthlyOverview);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateExpense(@Valid @RequestBody ExpenseUpdateRequest expenseUpdateRequest){
+        var user = userIdentityService.getAuthenticatedUser();
+        log.info("PUT request received - api/v1/expenses, for userId: {}, expense: {}", user.getUserId(), expenseUpdateRequest);
+        var expenseDto = new ExpenseDTO(expenseUpdateRequest);
+        expenseUseCase.updateExpense(user, expenseDto);
+        log.info("Expense updated - api/v1/expenses, for userId: {}, expense: {}", user.getUserId(), expenseUpdateRequest);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteExpense(@Valid @RequestParam Long expenseId) {
+        var user = userIdentityService.getAuthenticatedUser();
+        log.info("Received DELETE request - api/v1/expense, for userId: {}", user.getUserId());
+        expenseUseCase.deleteExpense(user, expenseId);
+        return ResponseEntity.noContent().build();
     }
 }

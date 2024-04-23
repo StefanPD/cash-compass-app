@@ -1,5 +1,6 @@
 package com.financing.app.income.application.domain.model;
 
+import com.financing.app.income.application.port.in.IncomeUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -24,5 +25,14 @@ public class IncomeDTO {
         this.description = description;
     }
 
-    public IncomeDTO() {}
+    public IncomeDTO() {
+    }
+
+    public IncomeDTO(IncomeUpdateRequest incomeUpdateRequest) {
+        this.incomeId = incomeUpdateRequest.incomeId();
+        this.amount = incomeUpdateRequest.amount();
+        this.source = incomeUpdateRequest.source();
+        this.incomeDate = incomeUpdateRequest.incomeDate();
+        this.description = incomeUpdateRequest.description();
+    }
 }
