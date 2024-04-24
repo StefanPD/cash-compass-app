@@ -17,8 +17,8 @@ services:
       - db
       - redis
     volumes:
-      - ./src:/app/src  # Mounts the source directory to the container
-      - ./pom.xml:/app/pom.xml  # Ensures changes to pom.xml are also reflected
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
 
   db:
     container_name: cash-compass-postgresql
