@@ -1,1 +1,0 @@
-ALTER TABLE public.users ADD COLUMN role varchar DEFAULT 'user';
