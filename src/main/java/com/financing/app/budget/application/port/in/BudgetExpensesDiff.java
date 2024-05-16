@@ -14,4 +14,6 @@ import java.math.BigDecimal;
 public class BudgetExpensesDiff {
     BudgetDTO budget;
     BigDecimal diff;
+
+    public BudgetExpensesDiff(){}
 }

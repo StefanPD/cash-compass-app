@@ -1,6 +1,5 @@
 package com.financing.app.budget;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -9,19 +8,23 @@ import com.financing.app.auth.adapter.out.persistence.TokenRepository;
 import com.financing.app.auth.application.domain.service.AuthenticationUseCase;
 import com.financing.app.budget.adapter.out.persistence.Budget;
 import com.financing.app.budget.adapter.out.persistence.BudgetRepository;
+import com.financing.app.budget.application.port.in.BudgetExpensesDiff;
 import com.financing.app.expenses.adapter.out.persistence.Expense;
 import com.financing.app.expenses.adapter.out.persistence.ExpenseRepository;
 import com.financing.app.user.adapter.out.UserRepository;
 import com.financing.app.utils.AuthenticationHelperTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,7 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+@Testcontainers
 @SpringBootTest(classes = {com.financing.app.bootstrap_module.AppApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -60,6 +63,10 @@ class BudgetControllerTest {
 
     private Token token;
 
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.0");
+    
     @BeforeEach
     void setUp() {
         mapper.registerModule(new JavaTimeModule());
@@ -74,7 +81,6 @@ class BudgetControllerTest {
             expenseRepository.save(expense);
         }
     }
-
 
     @Test
     void whenRequestingBudgets_withValidUserId_returnsBudgetDetails() throws Exception {
@@ -99,17 +105,36 @@ class BudgetControllerTest {
     }
 
     @Test
-    @Disabled("Temporarily disabled due to H2-PostgreSQL compatibility issues affecting test accuracy. Awaiting a workaround or solution.")
-    void whenRequestingBudgetsVsExpense_withValidUserId_returnsBudgetsVsExpense() throws JsonProcessingException, Exception {
+    void whenRequestingBudgetsVsExpense_withValidUserId_returnsBudgetsVsExpense() throws Exception {
+        var date = LocalDate.of(2024, 1, 1);
+        // When
+        var result = mockMvc.perform(get("/api/v1/budgets/budget-expense-check")
+                        .header("Authorization", "Bearer " + token.getToken())
+                        .param("date", date.toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        var json = result.getResponse().getContentAsString();
+        BudgetExpensesDiff history = mapper.readValue(json, BudgetExpensesDiff.class);
+
+        // Then
+        assertThat(history).isNotNull();
+        assertThat(history.getBudget()).isNotNull();
+        assertThat(history.getDiff()).isNotNull();
+
     }
 
     @Test
-    @Disabled("Temporarily disabled due to H2-PostgreSQL compatibility issues affecting test accuracy. Awaiting a workaround or solution.")
-    void whenRequestingBudgetsVsExpense_withInvalidUserId_throwsError() throws JsonProcessingException {
-    }
+    void whenRequestingBudgetsVsExpense_withStartDateAfterEndDate_throwsError() throws Exception {
 
-    @Test
-    @Disabled("Temporarily disabled due to H2-PostgreSQL compatibility issues affecting test accuracy. Awaiting a workaround or solution.")
-    void whenRequestingBudgetsVsExpense_withStartDateAfterEndDate_throwsError() throws JsonProcessingException {
+        var date = LocalDate.of(2025, 1, 1);
+        // When
+        mockMvc.perform(get("/api/v1/budgets/budget-expense-check")
+                        .header("Authorization", "Bearer " + token.getToken())
+                        .param("date", date.toString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 }
