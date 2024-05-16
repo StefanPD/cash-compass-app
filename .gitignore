@@ -1,3 +1,6 @@
+# Don't commit my .env file
+.env
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
