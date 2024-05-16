@@ -1,31 +1,27 @@
-FROM eclipse-temurin:21 as builder
-
-ENV MAVEN_VERSION 3.9.5
-ENV MAVEN_HOME /usr/share/maven
-ENV PATH $MAVEN_HOME/bin:$PATH
-
-ADD https://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz /tmp/maven.tar.gz
-
-RUN mkdir -p $MAVEN_HOME \
-    && tar -xzf /tmp/maven.tar.gz -C $MAVEN_HOME --strip-components=1 \
-    && rm -f /tmp/maven.tar.gz
-
-WORKDIR application
-COPY . .
-
-RUN mvn clean package -DskipTests && \
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+RUN mkdir /app
+ADD pom.xml /app
+WORKDIR /app
+RUN mvn verify --fail-never
+ADD . /app
+RUN mvn package -DskipTests && \
     java -Djarmode=layertools -jar target/*.jar extract
 
+FROM eclipse-temurin:21-jre-alpine
+RUN apk add dumb-init
 
-FROM eclipse-temurin:21
+RUN mkdir /cca-app
 
-WORKDIR application
+RUN addgroup --system pduser && adduser -S -s /bin/false -G pduser pduser
+COPY --from=builder app/dependencies/ ./cca-app
+COPY --from=builder app/spring-boot-loader/ ./cca-app
+COPY --from=builder app/snapshot-dependencies/ ./cca-app
+COPY --from=builder app/application/ ./cca-app
 
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/application/ ./
+WORKDIR cca-app
+
+RUN chown -R pduser:pduser /cca-app
+USER pduser
 
 EXPOSE 8083
-
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+CMD "dumb-init" "java" "org.springframework.boot.loader.launch.JarLauncher"
