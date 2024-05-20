@@ -23,5 +23,6 @@ WORKDIR cca-app
 RUN chown -R pduser:pduser /cca-app
 USER pduser
 
+
 EXPOSE 8083
 CMD "dumb-init" "java" "org.springframework.boot.loader.launch.JarLauncher"
