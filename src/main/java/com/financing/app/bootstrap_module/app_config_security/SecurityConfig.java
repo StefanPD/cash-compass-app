@@ -1,8 +1,12 @@
 package com.financing.app.bootstrap_module.app_config_security;
 
 
-import com.financing.app.auth.application.domain.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
+import org.springframework.boot.actuate.metrics.MetricsEndpoint;
+import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -27,14 +31,16 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeConfig -> {
-                            authorizeConfig.requestMatchers("/api/v1/auth/**").permitAll()
+                            authorizeConfig
+                                    .requestMatchers("/api/v1/auth/**").permitAll()
+                                    .requestMatchers(EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class, MetricsEndpoint.class, PrometheusScrapeEndpoint.class)).permitAll()
                                     .anyRequest().authenticated();
                         }
                 )
                 .sessionManagement(sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(redisRateLimitFilter,UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(redisRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
